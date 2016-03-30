@@ -116,9 +116,11 @@ public class MeetingRoomService {
 				//log.info(diffSec + " was diff sec value");
 				if((diffSec < DIFFSEC_THRESHOLD&&
 						rsd.getSensorId().equals(rsd_next.getSensorId())==true)&&
-						classDiffCount<=3){//規定値以内、かつ、クラス、レーンが同じなら
-					//when the class is different, count the value up
+						classDiffCount<=2){//規定値以内、かつ、クラス、レーンが同じなら
+					//when the class is different from last one, count the value up
 					if(rsd.getClassName(highThreshold)!=rsd_next.getClassName(highThreshold)){
+						//ここでデータの開始時間を記録
+						
 						classDiffCount++;
 					}else{
 						classDiffCount = 0;
