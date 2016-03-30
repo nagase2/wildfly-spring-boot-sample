@@ -1,0 +1,53 @@
+spring:
+    profiles:
+      #active: dev
+     active: test
+
+---
+spring:
+  profiles: dev
+  datasource:
+    driverClassName: org.h2.Driver
+    #メモリDB
+    #url: jdbc:h2:file:~/hajibootdb;AUTO_SERVER=true
+    #ファイルDB
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+    username: sa
+    password: 
+  jpa:
+    hibernate.ddl-auto: validate #変更を保管
+    #hibernate.ddl-auto: create-drop #毎回リフレッシュ　　
+    
+---
+spring:
+    profiles: test
+    datasource:
+      driverClassName: org.postgresql.Driver
+      #url: jdbc:postgresql://localhost:5432/meeting4
+      url: jdbc:postgresql://mydbinstance.c9adgg1kk04w.ap-northeast-1.rds.amazonaws.com:5432/meeting4
+      username: nagase
+      password: nagase222
+      xa:
+        dataSourceClassName: org.postgresql.xa.PGXADataSource
+    #hibernate.ddl-auto: validate #変更を保管
+    jpa:
+    #You can set spring.jpa.hibernate.ddl-auto explicitly and the standard Hibernate property values are none, validate, update, create, create-drop.
+      hibernate.ddl-auto: ddl-auto #毎回DBをリフレッシュ（これをセットするとdata.sqlが読み込まれるようになる
+---
+
+
+spring.thymeleaf.cache: false
+spring.view.prefix: /WEB-INF/jsp/
+spring.view.suffix: .jsp
+#Spring boot 1.3用　↓
+spring.mvc.view.prefix: /WEB-INF/jsp/
+spring.mvc.view.suffix: .jsp
+
+spring.thymeleaf.prefix: classpath:/thymeleaf/
+spring.thymeleaf.suffix:
+spring.thymeleaf.viewNames: '*.html,*.xhtml'
+security.basic.enabled: false
+
+
+
+

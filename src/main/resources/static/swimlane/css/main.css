@@ -1,0 +1,177 @@
+
+body {
+  font: 12px sans-serif;
+}
+
+.hitrect {
+	opacity: 0;
+}
+
+.statusicon {
+/*	background: url("../image/archive.svg") no-repeat;
+	  width: 20px;
+    height: 20px;*/
+	fill:red;
+	stroke: red;
+	stroke-width: 1;
+	opacity: 1;
+	 display: inline-block;
+
+}
+.statusicon:hover {
+	/*background: url("../alarm_24px.svg") no-repeat;
+		  width: 20px;
+    height: 20px;*/
+	stroke: red;
+	fill:red;
+	stroke-width: 0.8;
+	opacity: 0.8;
+	
+}
+
+.domain {
+	stroke: red;
+	stroke-width: 1;
+	opacity: 0.5;
+}
+
+.chart {
+	shape-rendering: crispEdges;
+}
+
+.mini text {
+	fill: #95a5a6; /*濃い目のグレイ*/
+	font: 8px メイリオ;	
+}
+
+.main text {
+	fill: #757575; /*濃い目のグレイ*/
+	font: 12px メイリオ;	
+}
+
+.month text {
+	text-anchor: start;
+}
+
+.todayLine {
+	stroke: red;
+	stroke-width: 1;
+	opacity: 0.5;
+}
+.hline {
+	stroke: gray;
+	stroke-width: 1;
+	opacity: 0.1;
+}
+.hline_xxxx{
+	stroke: red;
+	stroke-width: 1;
+	opacity: 0.3;
+}
+
+.mini_hline {
+	stroke: gray;
+	stroke-width: 0.5;
+	opacity: 0.2;
+}
+.main.axis.month.path{
+	fill:red;
+	stroke: red;
+}
+
+/* 目盛縦線 */
+.axis line{
+	stroke: gray;
+	stroke-width: 1;
+	opacity: 0.1;
+	fill: none;
+}
+ .axis path {
+	stroke: gray;
+	stroke-width: 1;
+	opacity: 0.5;
+	fill:           none;
+}
+
+
+.miniItem {
+	stroke-width: 5;	
+}
+
+.past {
+	stroke: #95a5a6;
+	fill: #95a5a6;
+	rx:3;
+    ry:3;
+    fill-opacity: .365;
+}
+/* アイテム */ 
+.future {
+	//stroke: #3498db;
+	fill: #3498db;
+	//rx:3;
+    //ry:3;
+    //fill-opacity: .665;
+	
+}
+
+
+.record {
+	/*stroke: black;*/
+	fill: black;
+    fill-opacity: .3;
+}
+
+
+.record-attend {
+	/*stroke: black;*/
+	fill: #000000;
+    fill-opacity: .8;
+}
+.record-unattend {
+	/*stroke: black;*/
+	fill: #000000;
+    fill-opacity: .2;
+}
+.record-attend:hover {
+	fill: red;
+    fill-opacity: 1;
+}
+.record-unattend:hover {
+	fill: red;
+    fill-opacity: 1;
+}
+
+.brush .extent {
+	stroke: gray;
+	fill: blue;
+	fill-opacity: .165;
+}
+
+.d3-tip {
+  line-height: 1.4;
+  font-weight: bold;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 0.9;
+  color: rgba(0, 0, 0, 0.7);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}

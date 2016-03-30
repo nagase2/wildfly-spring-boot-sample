@@ -1,0 +1,57 @@
+
+
+/* 利用率80%以上 */
+.used {
+	stroke: #B0BEC5;
+	fill: #B0BEC5;
+	opacity: 0.8;
+	rx: 1;
+	ry: 1;
+}
+
+.used:hover {
+	fill: #2980b9;
+	stroke: #2980b9;
+}
+/* 利用率50%以上 */
+.hused {
+	stroke: #78909C;
+	fill: #78909C;
+	opacity: 0.8;
+	rx: 1;
+	ry: 1;
+}
+
+.hused:hover {
+	stroke: #27ae60;
+	fill: #27ae60;
+}
+/*　利用率 10%以上-50%以下 */
+.bitused {
+	stroke: #546E7A;
+	fill: #546E7A;
+	opacity: 0.8;
+	rx: 1;
+	ry: 1;
+}
+
+.bitused:hover {
+	stroke: #546E7A;
+	fill: #546E7A;
+	rx: 1;
+	ry: 1;
+}
+
+/* 利用率10%以下 */
+.unused {
+	stroke: #37474F;
+	fill: #37474F;
+	opacity: 0.8;
+	rx: 1;
+	ry: 1;
+}
+
+.unused:hover {
+	stroke: #c0392b;
+	fill: #c0392b;
+}

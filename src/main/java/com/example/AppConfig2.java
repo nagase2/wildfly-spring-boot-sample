@@ -18,23 +18,23 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJpaAuditing
 public class AppConfig2 {
-  @Autowired
-  DataSourceProperties dataSourceProperties;
-
-  DataSource dataSource;
-
-  @Bean
-  @Primary
-  @ConfigurationProperties("spring.datasource") // ここを追加
-  DataSource realDataSource() {
-    DataSourceBuilder factory =
-        DataSourceBuilder.create(this.dataSourceProperties.getClassLoader())
-            .url(this.dataSourceProperties.getUrl())
-            .username(this.dataSourceProperties.getUsername())
-            .password(this.dataSourceProperties.getPassword());
-    this.dataSource = factory.build();
-    return new Log4jdbcProxyDataSource(this.dataSource);
-  }
+//  @Autowired
+//  DataSourceProperties dataSourceProperties;
+//
+//  DataSource dataSource;
+//
+//  @Bean
+//  @Primary
+//  @ConfigurationProperties("spring.datasource") // ここを追加
+//  DataSource realDataSource() {
+//    DataSourceBuilder factory =
+//        DataSourceBuilder.create(this.dataSourceProperties.getClassLoader())
+//            .url(this.dataSourceProperties.getUrl())
+//            .username(this.dataSourceProperties.getUsername())
+//            .password(this.dataSourceProperties.getPassword());
+//    this.dataSource = factory.build();
+//    return new Log4jdbcProxyDataSource(this.dataSource);
+//  }
 
   @Bean
   public AuditorAwareImpl auditorProvider() {
