@@ -7,3 +7,7 @@ hs_err_pid*
 # IntelliJ IDEA
 /.idea/
 /*.iml
+/build/
+/bin/
+.gradle/
+.project

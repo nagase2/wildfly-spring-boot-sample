@@ -1,0 +1,644 @@
+
+<meta http-equiv="X-UA-Compatible" content="IE=11">
+<!-- 
+Zoomサンプル
+http://bl.ocks.org/mbostock/4015254 
+-->
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<title>Swimlane using d3.js</title>
+<script src="js/d3.v3.min.js" charset="utf-8"></script>
+<script src="js/d3.tip.v0.6.3.js"></script>
+<script src="js/jquery-2.2.1.min.js"></script>
+<script type="text/javascript" src="randomData.js"></script>
+<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript">
+https://github.com/hashrock/ganttpad
+
+	//デフォルトの動的読み込みCSS名称
+	var cssname = "pattern1.css";
+	param = GetQueryString();
+	if(param !== null){
+		//css名が入力されていれば取得する。
+	    cssname = (param["cssname"] !== undefined) ? param["cssname"]+".css" : cssname;
+	}
+	console.log("cssname="+cssname);
+	//CSSファイルを読み込み
+	loadCss("css/" + cssname);
+</script>
+</head>
+<body>
+	<br />
+	<h1>会議室利用実績分析画面デモ</h1>
+	データはテスト的に作成した、実績データと予定データをそれぞれ別のJSONファイルから読み込んでいる。 (test.json/test2.json)
+	<br /> これらをDBから取得するように作りこむことで、実際に動く仕組みの作成が可能となる。
+	<br />
+	<br />
+
+	<form action="index.html" method="GET">
+		デザインをここで選択できます。 <select name="cssname" onchange="submit();">
+			<option value="">-</option>
+			<option value="pattern0">1</option>
+			<option value="pattern1">角丸バージョン</option>
+			<option value="pattern2">グリーン主体</option>
+			<option value="pattern3">薄い色</option>
+			<option value="pattern4">グレイスケール</option>
+		</select>
+	</form>
+	<input type="button" value="データリロード" onclick="reloadData();" />
+	<input type="button" value="リアルタイム確認" onclick="focusToNow();" />
+
+	<div id="main"></div>
+
+	<script type="text/javascript">
+
+//GETで渡された値を動的に取得する。
+console.log("test="+ test);
+
+//時間フォーマットはこちら　https://github.com/mbostock/d3/wiki/Time-Formatting
+var tipsFormat = d3.time.format("%m/%d %H:%M:%S(%a)"); //%L .. ミリセカンド
+var timerSVG = "<img src='alarm_24px.svg' />"
+//Tool tipの中身
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<div>"+
+    "ID : " + d.id + "<br/>" +
+    "開始時間 : " + tipsFormat(d.start) + "<br/>"+
+    "終了時間 : " + tipsFormat(d.end) + "<br/>"+
+    "利用率 :" + d.usagelate + "<br/>" +
+    "予約者名 : 長瀬　義正 <br/>"+
+    "説明 : " + d.desc + "("+d.id+")"
+    "</div>";
+  })
+
+var statusTip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<div>"+
+    "ID : " + d.id + "<br/>" +
+    "ステータス : " + d.status + "<br/>"+
+    "Since : 10分前<br/>" +
+    "</div>";
+  })
+  
+//曜日表示を日本語に設定
+ var ja_JP = d3.locale({
+     "decimal": ".",
+     "thousands": ",",
+     "grouping": [3],
+     "currency": ["", "円"],
+     "dateTime": "%a %b %e %X %Y",
+     "date": "%Y/%m/%d",
+     "time": "%H:%M:%S",
+     "periods": ["AM", "PM"],
+     "days": ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"],
+     "shortDays": ["日", "月", "火", "水", "木", "金", "土"],
+     "months": ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+     "shortMonths": ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
+ });
+
+
+window.onload = function()
+{
+	//読み込み時にここが呼ばれる
+	console.log("Onload has been called");
+	//setTimeout("reloadData()",1000);
+	reloadData();
+};
+
+function focusToNow(){
+	//選択範囲を今に拡大する。
+	
+	var yesterday = new Date();
+	yesterday.setHours(yesterday.getHours()-1);
+	var tomorrow = new Date();
+	tomorrow.setMinutes(tomorrow.getMinutes()+30);
+
+	brush.extent([yesterday,tomorrow]); //ここで選択範囲を決定
+	display();
+	
+}
+
+
+/*
+ * リロードボタン、またはタイマーで呼び出される。データを再読込して再描画する。
+ */
+function reloadData(){
+	//TODO:ここは重複しているので、後で書き直し。
+	 data = JSON.parse(getTextFile('test.json')); //予定（予約）
+	 data2 = JSON.parse(getTextFile('test2.json')); //実績
+	 // data2 = JSON.parse(getTextFile('../meeting/list')); //実績
+	//console.log(data.items[0].end);
+	for(var i=0;i<data.items.length;i++){
+		data.items[i].start=new Date( data.items[i].start );
+		data.items[i].end=new Date( data.items[i].end );
+	}
+	//console.log(data.items[0].end);
+	for(var i=0;i<data2.items.length;i++){
+		data2.items[i].start=new Date( data2.items[i].start );
+		data2.items[i].end=new Date( data2.items[i].end );
+	}
+	items = data.items;
+	items2 = data2.items;
+	now = new Date();
+	display();
+	//繰り返し
+	setTimeout("reloadData()",12000);
+}
+console.log("JSON取得");
+
+var data = JSON.parse(getTextFile('test.json')); //予定（予約）
+var data2 = JSON.parse(getTextFile('test2.json')); //実績
+//var data2 = JSON.parse(getTextFile('../meeting/list')); //実績
+//console.log(data.items[0].end);
+for(var i=0;i<data.items.length;i++){
+	data.items[i].start=new Date( data.items[i].start );
+	data.items[i].end=new Date( data.items[i].end );
+}
+//console.log(data.items[0].end);
+for(var i=0;i<data2.items.length;i++){
+	data2.items[i].start=new Date( data2.items[i].start );
+	data2.items[i].end=new Date( data2.items[i].end );
+}
+
+var lanes = data.lanes
+  , items = data.items,items2 = data2.items
+  , now = new Date();
+
+var margin = {top: 30, right: 50, bottom: 20, left: 160}
+  , width = 1100 - margin.left - margin.right
+  , height = 500 - margin.top - margin.bottom
+  , miniHeight = lanes.length * 12 + 50
+  , mainHeight = height - miniHeight - 40;
+
+//登録されているデータの最大値と最小値を元に表示範囲を決定する。
+var x = d3.time.scale()
+	.domain([d3.time.sunday(d3.min(items, function(d) { return d.start; })),
+			 d3.max(items, function(d) { return d.end; })])
+	.range([0, width]);
+var x1 = d3.time.scale().range([0, width]);
+
+var ext = d3.extent(lanes, function(d) { return d.id; });
+var y1 = d3.scale.linear().domain([ext[0], ext[1] + 1]).range([0, mainHeight]);
+var y2 = d3.scale.linear().domain([ext[0], ext[1] + 1]).range([0, miniHeight]);
+
+//#mainのタグに出力
+var chart = d3.select('#main')
+	.append('svg:svg')
+	.attr('width', width + margin.right + margin.left)
+	.attr('height', height + margin.top + margin.bottom)
+	.attr('class', 'chart');
+
+chart.call(tip); //ここでTipを具現化？
+chart.call(statusTip); //tool
+
+chart.append('defs').append('clipPath')
+	.attr('id', 'clip')
+	.append('rect')
+		.attr('width', width)
+		.attr('height', mainHeight);
+
+//ズーム範囲設定
+var self = this;
+var zoom = d3.behavior.zoom()
+    .x(x)
+    .scale(0.5)
+    .scaleExtent([0.3, 10]) //最大ズーム（年単位）、最小ズーム（分単位）
+    .on("zoom", function () {
+    	console.log("zoooom")
+    	chart.select("g.main.axis.month")
+    	.call(x1MonthAxis)
+    	//self.update();
+    });
+    
+//Zoomの時に呼ばれる
+this.update = function () {
+      console.log("update! ");
+      display();
+      //brush();
+};
+    
+var main = chart.append('g')
+	.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+	.attr('width', width)
+	.attr('height', mainHeight)
+	.attr('class', 'main')
+   // .call(zoom);  ///zoom関数に引数付きでセレクションを渡す 。別でRect描画しないとイベントが拾えない？
+	
+   //ズーム当たり判定
+   main.append("rect")
+       .attr("width", width)
+       .attr("height", mainHeight)
+       .attr('class', 'hitrect')
+
+var mini = chart.append('g')
+	.attr('transform', 'translate(' + margin.left + ',' + (mainHeight + margin.top + 40) + ')')
+	.attr('width', width)
+	.attr('height', miniHeight)
+	.attr('class', 'mini');
+
+//レーンの横線を描画する。
+main.append('g').selectAll('.laneLines')
+	.data(lanes)
+	.enter().append('line')
+	.attr('x1', 0)
+	.attr('y1', function(d) { return d3.round(y1(d.id)) + 0.5; })
+	.attr('x2', width)
+	.attr('y2', function(d) { return d3.round(y1(d.id)) + 0.5; })
+	.attr('class', 'hline');
+	//.attr('stroke', function(d) { return d.label === '' ? 'white' : 'lightgray' });
+
+//会議室名称Text
+main.append('g').selectAll('.laneText')
+	.data(lanes)
+	.enter().append('text')
+	.text(function(d) { return d.label; })
+	.attr('x', -30)
+	.attr('y', function(d) { return y1(d.id + .5); })
+	.attr('dy', '0.5ex')
+	.attr('text-anchor', 'end')
+	.attr('class', 'laneText');
+	
+//会議室ステータスアイコン
+main.append('g').selectAll('.lanestatus')
+	.data(lanes)
+	.enter().append('image')
+	.attr('xlink:href', 
+			function(d) { return "img/"+ d.status + ".svg"; })
+	.attr('height','18px')
+	.attr('width','18px')
+	.attr('x', -22)
+	.attr('y', function(d) { return y1(d.id + .12); })
+	.attr('class', 'statusicon')
+	.on('mouseover', statusTip.show) //tip
+	.on('mouseout', statusTip.hide)
+	;
+
+// ミニグラフの横線
+mini.append('g').selectAll('.laneLines')
+	.data(lanes)
+	.enter().append('line')
+	.attr('x1', 0)
+	.attr('y1', function(d) { return d3.round(y2(d.id)) + 0.5; })
+	.attr('x2', width)
+	.attr('y2', function(d) { return d3.round(y2(d.id)) + 0.5; })
+	.attr('class', 'mini_hline');
+	//.attr('stroke', function(d) { return d.label === '' ? 'white' : 'lightgray' });
+
+//Miniチャートの各項目テキスト（会議室名）
+mini.append('g').selectAll('.laneText')
+	.data(lanes)
+	.enter().append('text')
+	.text(function(d) { return d.label; })
+	.attr('x', -10)
+	.attr('y', function(d) { return y2(d.id + .5); })
+	.attr('dy', '0.5ex')
+	.attr('text-anchor', 'end')
+	.attr('class', 'laneText');
+
+//上グラフ上Tick
+var x1MonthAxis = d3.svg.axis()
+	.scale(x1)
+	.orient('top')
+	.ticks(d3.time.mondays, 1)
+	.tickFormat(d3.time.format('%b - Week %W'))
+	.tickPadding(3)
+// 	.innerTickSize(-0)  // 目盛線の長さ（内側）
+//    .outerTickSize(0.2) // 目盛線の長さ（外側）
+	.tickSize(5, 0, 0);
+	
+ //上グラフ上Tick2
+   var x1MonthAxis_vLine = d3.svg.axis()
+   	.scale(x1)
+   	.orient('top')
+   	.ticks(d3.time.hours, 1)
+   	.tickFormat(d3.time.format(''))
+   	.tickPadding(3)
+   	.innerTickSize(-mainHeight)  // 目盛線の長さ（内側）
+      .outerTickSize(0.2) // 目盛線の長さ（外側）
+
+//上グラフ下Tick
+var x1DateAxis = d3.svg.axis()
+	.scale(x1)
+	.orient('bottom')
+	.ticks(d3.time.days, 1)
+	.tickFormat(d3.time.format('%a %d'))
+	.tickPadding(5)
+	.innerTickSize(-mainHeight)  // 目盛線の長さ（内側）
+.outerTickSize(0) // 目盛線の長さ（外側）
+	//.tickSize(6, 0, 0); //下のメモリ線、？、一番下のX線の太さ
+	
+//下グラフ上Tick
+var xMonthAxis = d3.svg.axis()
+	.scale(x)
+	.orient('top')
+	.ticks(d3.time.mondays, 1)
+	//.ticks(d3.time.months, 1)
+	.tickFormat(d3.time.format('%Y %b'))
+	.tickPadding(12)
+	.tickSize(5, 0, 0);
+
+//下グラフの下Ticks
+var xDateAxis = d3.svg.axis()
+	.scale(x)
+	.orient('bottom')
+	//[[]].ticks(d3.time.mondays, (x.domain()[1] - x.domain()[0]) > 15552e6 ? 2 : 1)
+	.ticks(d3.time.days, 3)
+	.tickFormat(d3.time.format('%d'))
+	.tickSize(6, 0, 0.5);
+
+
+main.append('g')
+.attr('transform', 'translate(0,' + mainHeight + ')')
+.attr('class', 'main axis date')
+.call(x1DateAxis)//.call(innerLineAxis);
+
+main.append('g')
+	.attr('transform', 'translate(0,0.5)')
+	.attr('class', 'main axis month')
+	.call(x1MonthAxis)
+	.selectAll('text')
+		.attr('dx', 5)
+		.attr('dy', 12);
+
+main.append('g')
+.attr('transform', 'translate(0,0.5)')
+.attr('class', 'main axis month2') //赤くならない
+//.attr('class', 'hline_xxxx') //これを入れると線が消える…
+.call(x1MonthAxis_vLine)
+// .selectAll('text')
+// 	.attr('dx', 5)
+// 	.attr('dy', 12);
+
+mini.append('g')
+	.attr('transform', 'translate(0,' + miniHeight + ')')
+	.attr('class', 'axis date')
+	.call(xDateAxis);
+
+//下の上のメモリ表示
+mini.append('g')
+	.attr('transform', 'translate(0,0.5)')
+	.attr('class', 'axis month')
+	.call(xMonthAxis)
+	.selectAll('text')
+		.attr('dx', 5)
+		.attr('dy', 12);
+	
+mini.append('line')
+	.attr('x1', x(now) + 0.5)
+	.attr('y1', 0)
+	.attr('x2', x(now) + 0.5)
+	.attr('y2', miniHeight)
+	.attr('class', 'todayLine');
+
+// draw the items
+var itemRects = main.append('g')
+	.attr('clip-path', 'url(#clip)');
+	
+var itemRects2 = main.append('g')
+.attr('clip-path', 'url(#clip)');
+
+//draw a line representing today's date
+main.append('line')
+	.attr('y1', 0)
+	.attr('y2', mainHeight)
+	.attr('class', 'main todayLine')
+	.attr('clip-path', 'url(#clip)');
+	
+//下のミニグラフを作成。
+mini.append('g').selectAll('miniItems')
+	.data(getPaths(items))
+	.enter().append('path')
+	.attr('class', function(d) { return 'miniItem ' + d.class; })
+	.attr('d', function(d) { 
+		return d.path; });
+		
+// invisible hit area to move around the selection window
+mini.append('rect')
+	.attr('pointer-events', 'painted')
+	.attr('width', width)
+	.attr('height', miniHeight)
+	.attr('visibility', 'hidden')
+	.on('mouseup', moveBrush); ///
+
+//console.log("wed::"+d3.time.wednesday(now));
+// draw the selection area
+
+var yesterday = new Date();
+yesterday.setDate(yesterday.getDate()-1);
+var tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate()+1);
+
+var brush = d3.svg.brush()
+	.x(x) //x軸を選択可能範囲に指定
+	//.extent([d3.time.wednesday(now),d3.time.friday.ceil(now)]) //初期選択範囲
+	.extent([d3.time.day.round(yesterday),d3.time.day.round(tomorrow)]) //初期選択範囲を設定する。
+	//.extent([yesterday,tomorrow]) //初期選択範囲を設定する。
+	.on("brush", display);
+
+mini.append('g')
+	.attr('class', 'x brush')
+	.call(brush) ///
+	.selectAll('rect')
+		.attr('y', 1)
+		.attr('height', miniHeight - 1);
+
+mini.selectAll('rect.background').remove();
+display();
+
+
+
+this.initialize = function () {
+	console.log("initializeが呼ばれました")
+}
+
+function display () {
+	console.log("display() has been called. "+brush.extent()[0] + "  " +brush.extent()[1])
+	var rects,rects2, labels
+// 	  , minExtent = d3.time.day(brush.extent()[0])  //ここでドラッグの際の更新粒度を決定
+// 	  , maxExtent = d3.time.day(brush.extent()[1])  //ここでドラッグの際の更新粒度を決定
+//	  , minExtent = d3.time.hour(brush.extent()[0])
+//	  , maxExtent = d3.time.hour(brush.extent()[1])
+// 	  , minExtent = d3.time.minute(brush.extent()[0])
+// 	  , maxExtent = d3.time.minute(brush.extent()[1])
+ 	  , minExtent = brush.extent()[0]
+ 	  , maxExtent = brush.extent()[1]
+	  , visItems = items.filter(function (d) { return d.start < maxExtent && d.end > minExtent}) //表示対象となるItemに絞る
+	  , visItems2 = items2.filter(function (d) { return d.start < maxExtent && d.end > minExtent}); //表示対象となるItemに絞る
+
+	//選択範囲によって表示領域を変える
+	mini.select('.brush').call(brush.extent([minExtent, maxExtent]));		
+	  
+	x1.domain([minExtent, maxExtent]);
+	
+	//縮尺幅により、メモリの表示の仕方を変更する。
+	if ((maxExtent - minExtent) > 1468800000) { //年単位
+		//後ろの引数を変えると、目盛をスキップする数となる。
+		x1MonthAxis.ticks(d3.time.mondays, 1).tickFormat(ja_JP.timeFormat('%Y')); //上側メモリ
+		x1MonthAxis_vLine.ticks(d3.time.hours, 24);
+		x1DateAxis.ticks(d3.time.days, 3).tickFormat(ja_JP.timeFormat('%b%d(%a)')); //下側メモリ
+	}
+	else if ((maxExtent - minExtent) > 1109600000) {//年単位
+		x1MonthAxis.ticks(d3.time.mondays, 2).tickFormat(d3.time.format('%Y'));
+		x1MonthAxis_vLine.ticks(d3.time.hours, 2);
+		x1DateAxis.ticks(d3.time.days, 2).tickFormat(ja_JP.timeFormat('%b%d(%a)'))
+		//console.log("1 vale="+(maxExtent - minExtent));
+	}
+	else if ((maxExtent - minExtent) > 259200000) {//月単位
+		x1MonthAxis.ticks(d3.time.mondays, 1).tickFormat(ja_JP.timeFormat('%Y'))
+		x1MonthAxis_vLine.ticks(d3.time.hours, 2);
+		x1DateAxis.ticks(d3.time.days, 1).tickFormat(ja_JP.timeFormat('%b%d(%a)'))
+		//console.log("2 vale="+(maxExtent - minExtent));
+	}
+	else if ((maxExtent - minExtent) > 86400000) {//月単位
+		//x1MonthAxis.ticks(d3.time.days, 1).tickFormat(d3.time.format('%b %e(%a)')) //英語
+		x1MonthAxis.ticks(d3.time.days, 1).tickFormat(ja_JP.timeFormat('%b%e(%a)')) //日本語
+		x1MonthAxis_vLine.ticks(d3.time.hours, 1); //追加の細線
+		x1DateAxis.ticks(d3.time.hours, 3).tickFormat(d3.time.format('%H:%M '))
+		console.log("3 vale="+(maxExtent - minExtent));
+	}
+	else if ((maxExtent - minExtent) > 9088764) {//月単位
+		//x1MonthAxis.ticks(d3.time.days, 1).tickFormat(d3.time.format('%b %e(%a)')) //英語
+		x1MonthAxis.ticks(d3.time.days, 1).tickFormat(ja_JP.timeFormat('%b%e(%a)')) //日本語
+		x1MonthAxis_vLine.ticks(d3.time.hours, 2); //追加の細線
+		x1DateAxis.ticks(d3.time.minutes, 90).tickFormat(d3.time.format('%H:%M '))
+		console.log("4 vale="+(maxExtent - minExtent));
+	}
+	else {//日単位
+		//x1MonthAxis.ticks(d3.time.hours, 1).tickFormat(d3.time.format('%b %e (%a) %p'))
+		x1MonthAxis.ticks(d3.time.hours, 1).tickFormat(ja_JP.timeFormat('%b%e(%a)')) 
+		x1MonthAxis_vLine.ticks(d3.time.minutes, 1);
+		x1DateAxis.ticks(d3.time.minutes, 10).tickFormat(d3.time.format('%H:%M'))
+		//console.log("5 vale="+(maxExtent - minExtent));
+	}
+
+	// shift the today line
+	main.select('.main.todayLine')
+	.transition().delay(0).duration(500) //アニメーション入れる場合はコレを挟む
+	//.ease("elastic")
+		.attr('x1', x1(now) + 0.5)
+		.attr('x2', x1(now) + 0.5);
+
+	// update the axis
+	main.select('.main.axis.date')
+	.transition().delay(0).duration(300) //アニメーション入れる場合はコレを挟む
+	.call(x1DateAxis);
+	
+	main.select('.main.axis.month')
+	.transition().delay(0).duration(300) //アニメーション入れる場合はコレを挟む
+	.call(x1MonthAxis)
+	
+	//二つ目？
+	main.select('.main.axis.month2')
+	.transition().delay(0).duration(300) //アニメーション入れる場合はコレを挟む
+	.call(x1MonthAxis_vLine)
+ 		.selectAll('text')
+ 		.attr('font-size',3)//効果なし？？？
+ .attr('dy', 12)
+ 	.attr('dx', 5);
+
+	// upate the item rects
+	rects = itemRects.selectAll('rect')
+		.data(visItems, function (d) { return d.id; })
+		.attr('x', function(d) { return x1(d.start); })
+		.attr('width', function(d) { return x1(d.end) - x1(d.start); });
+			
+	//Item描画
+	rects.enter().append('rect')
+		.attr('x', function(d) { return x1(d.start); })
+		.attr('y', function(d) { return y1(d.lane) + .1 * y1(1) + 0.5; }) //Itemの縦幅調整
+		.attr('width', function(d) { return x1(d.end) - x1(d.start); })
+		.attr('height', function(d) { return .8 * y1(1); })//Itemの縦幅調整
+		.attr('class', function(d) { return 'mainItem ' + d.class; })
+		.on('mouseover', tip.show) //tip
+		.on('mouseout', tip.hide); //tip;
+		
+	rects.exit().remove();
+	
+	//---ここから実績線分の表示処理-------
+		// upate the item rects
+	rects2 = itemRects2.selectAll('rect')
+		.data(visItems2, function (d) { return d.id; })
+		.attr('x', function(d) { return x1(d.start); })
+		.attr('width', function(d) { return x1(d.end) - x1(d.start); });
+			
+	//中心の細い線。利用実績表現用。
+	rects2 = itemRects2.selectAll('rect')
+		.data(visItems2, function (d) { 
+			return d.id; })
+		.attr('x', function(d) { return x1(d.start); })
+		.attr('width', function(d) { return x1(d.end) - x1(d.start); });
+			
+	//Item描画
+	rects2.enter().append('rect')
+		.attr('x', function(d) { return x1(d.start); })
+		.attr('y', function(d) { return y1(d.lane) + .41 * y1(1) + 0.5; }) //Itemの縦幅調整
+		.attr('width', function(d) { return x1(d.end) - x1(d.start); })
+		.attr('height', function(d) { return .15 * y1(1); })//Itemの縦幅調整
+		.attr('class', function(d) { return 'mainItem ' + d.class; })
+			.on('mouseover', tip.show) //tip
+		.on('mouseout', tip.hide); //tip;
+	
+	rects2.exit().remove();
+	
+	//多分、ここでデータの表示位置を決定。データの個数分ループする。
+	rects2 = itemRects2.selectAll('rect')
+	.data(visItems2, function (d) {return d.id; })
+		//.transition().delay(500).duration(1500) //アニメーション入れる場合はコレを挟む
+	.attr('x', function(d) { return x1(d.start); })
+	.attr('width', function(d) { return x1(d.end) - x1(d.start); });
+	
+}
+
+/**
+ * 引数で指定されたファイルを読み込む(Jsonファイル読み込み用）
+ */
+function getTextFile (fname) {
+var text = null, ajax;
+if (ajax = new /*@if(1) ActiveXObject("Microsoft.XMLHTTP") @else@*/ XMLHttpRequest() /*@end@*/) 
+with (ajax) {
+onreadystatechange = function () { readyState == 4 && status == 200 && (text = responseText); };
+open('GET', fname, false);
+send(null);
+};
+return text;
+}
+
+function moveBrush () {
+	//console.log(brush.extent());
+	var origin = d3.mouse(this)
+	  , point = x.invert(origin[0])
+	  , halfExtent = (brush.extent()[1].getTime() - brush.extent()[0].getTime()) / 2
+	  , start = new Date(point.getTime() - halfExtent)
+	  , end = new Date(point.getTime() + halfExtent);
+
+	brush.extent([start,end]); //ここで選択範囲を決定
+	display();
+}
+
+// generates a single path for each item class in the mini display
+// ugly - but draws mini 2x faster than append lines or line generator
+// is there a better way to do a bunch of lines as a single path with d3?
+function getPaths(items2) {
+	var paths = {}, d, offset = .5 * y2(1) + 0.5, result = [];
+	for (var i = 0; i < items2.length; i++) {
+		d = items2[i];
+		if (!paths[d.class]) paths[d.class] = '';	
+		paths[d.class] += ['M',x(d.start),(y2(d.lane) + offset),'H',x(d.end)].join(' ');
+	}
+
+	for (var className in paths) {
+		result.push({class: className, path: paths[className]});
+	}
+
+	return result;
+}
+
+</script>
+</body>
+</html>

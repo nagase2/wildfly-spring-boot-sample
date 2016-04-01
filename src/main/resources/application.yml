@@ -23,8 +23,8 @@ spring:
     profiles: test
     datasource:
       driverClassName: org.postgresql.Driver
-      #url: jdbc:postgresql://localhost:5432/meeting4
-      url: jdbc:postgresql://mydbinstance.c9adgg1kk04w.ap-northeast-1.rds.amazonaws.com:5432/meeting4
+      url: jdbc:postgresql://localhost:5432/meeting4
+      #url: jdbc:postgresql://mydbinstance.c9adgg1kk04w.ap-northeast-1.rds.amazonaws.com:5432/meeting4
       username: nagase
       password: nagase222
       xa:
