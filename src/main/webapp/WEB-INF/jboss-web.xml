@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss-web>
 <jboss-web>
-    <context-root>/test12</context-root>
-    <default-encoding>UTF-8</default-encoding>
-    <!--  
-    <resource-ref>
-        <res-ref-name>datasources/meeting2DS</res-ref-name>
-        <res-type>javax.sql.DataSource</res-type>
-        <jndi-name>java:jboss/datasources/meeting2DS</jndi-name>
-    </resource-ref>
-    -->
-</jboss-web>
+  <context-root>/</context-root>
+  <default-encoding>UTF-8</default-encoding>
+  
+  <resource-ref>
+    <res-ref-name>jdbc/primary</res-ref-name>
+    <jndi-name>java:jboss/datasources/primary</jndi-name>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>jdbc/secondary</res-ref-name>
+    <jndi-name>java:jboss/datasources/secondary</jndi-name>
+  </resource-ref>
+  
+  
 
+</jboss-web>
