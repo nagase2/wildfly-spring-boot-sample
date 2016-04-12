@@ -41,6 +41,10 @@ repositories {
 
 }
 
+springBoot { mainClass = "com.example.App2" }
+bootRepackage { mainClass = 'com.example.App2' }
+bootRun { addResources = false }
+
 dependencies {
 
 	compile("org.springframework.boot:spring-boot-devtools:1.3.0.RELEASE")
