@@ -1,0 +1,203 @@
+<head profile="http://www.w3.org/2005/10/profile">
+<title>ダッシュボードデモ</title>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+
+<!-- Bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<style>
+.ui-widget-header{
+	background:#3880F5 !important;
+	color:white !important;
+
+	font-size:12px;
+	border: 0px solid #aaaaaa !important;
+	    margin-top: 0px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+}
+.ui-widget-content{
+	border: 1px solid #F7F2F2 !important;
+	    border-radius: 5px;
+}
+.resize {
+	width: 500px;
+	height: 300px;
+	padding: 0.5em; //
+	display: box;
+	overflow: hidden;　
+}
+
+.resize h3 {
+	text-align: center;
+	margin: 0;
+}
+table.dashtable td, th {
+    padding: 3px;
+    border-bottom: 0px dashed silver;
+    height: 20px;
+    font-size: 12px;
+}
+</style>
+
+<script>
+	$(function() {
+		$(".resize").resizable({
+		//grid: 50,
+		//alsoResize: "#also"
+		});
+	});
+
+	$(function() {
+		$(".resize").draggable({
+			snap : ".dashtable",
+			snapMode: "inner"
+		});
+	});
+	$(function() {
+		$.ajax({
+			//URLは同じドメインに限る
+			url : "jq/spark/spark.html",
+			type : "GET",
+			cache: false,
+			data : { //ここで記述したデータがパラメータとなる。
+				zipcode : 97201,
+				testval : "xxxxx"
+			}}).done(function(data){
+				$("#one_window").html(data);
+		});
+	});
+	$(function() {
+		$.ajax({
+			//URLは同じドメインに限る
+			url : "jq/spark2/spark.html",
+			type : "GET",
+			cache: false,
+			data : { //ここで記述したデータがパラメータとなる。
+			}}).done(function(data){
+				$("#two_window").html(data);
+		});
+	});
+	$(function() {
+			//do something 
+		$.ajax({
+			//URLは同じドメインに限る
+			url : "jq/barchart/barchart.html",
+			type : "GET",
+			cache: false,
+			data : { //ここで記述したデータがパラメータとなる。
+			}}).done(function(data){
+				$("#three_window").html(data);
+		});
+	});
+	
+	$(function() {
+		//do something 
+		console.log("start ajax4");
+		$("#four_window").html("<div class='waiter' width='100%' height='500' align='center' style='vertical-align: middle;'>3秒ウエイト<br/><img src='./loading.gif' /></div>");
+		
+		$.ajax({
+			//URLは同じドメインに限る
+			url : "d3-circle/circlechart.html",
+			type : "GET",
+			cache: false,
+			data : { //ここで記述したデータがパラメータとなる。
+			}
+		}).done(function(data){
+			var count = 0;
+			var countup = function(){
+			console.log(count++);
+			}
+			　var id = setInterval(function(){
+			　　countup();
+			　　if(count > 2){　//2秒ウエイト
+				$("#four_window").html(data);
+			　　　clearInterval(id);　//idをclearIntervalで指定している
+			　　}}, 1000);
+			
+			console.log("end ajax4");
+		});
+	});
+	
+	
+	$(function() {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+	
+	function sleep(sleep_time){
+		var count = 0;
+		var countup = function(){
+		console.log(count++);
+		}
+		　var id = setInterval(function(){
+		　　countup();
+		　　if(count > sleep_time){　
+		　　　clearInterval(id);　//idをclearIntervalで指定している
+		　　}}, 1000);
+	}
+	
+</script>
+</head>
+<body>
+
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<table class="dashtable">
+		<tr>
+			<td >
+
+				<div id="div1" class="ui-widget-content resize" width="100%" style="padding: 0px;">
+					<a id="link1" href="jq/spark/spark.html" rel="tool-tip" data-toggle="tooltip" data-placement="bottom" title="品番ごとに安全在庫率をグラフで表現してあります。実際は、安全在庫率が危険な値に達している順などにしておくと、異常に早く気がつけると考えています。">
+					<h4 id="header1" class="ui-widget-header"> 
+					品番ごとの在庫安全率</h4> 
+					</a>
+						<div id="one_window" style="margin-left:15px""></div>
+				</div>
+				<script>
+				$("#header1").mouseover(function(){
+					console.log("mouseover");
+					$("#link1").tooltip('show');
+				}).mouseleave(function(){
+					console.log("mouseleaver");
+				});
+				
+				</script>
+
+			</td>
+			<td >
+				<div id="resizable2" class="ui-widget-content resize" style="padding: 0px;overflow-y: scroll;">
+					<a  href="jq/spark2/spark.html">
+					<h4 class="ui-widget-header" style="margin-top: 0px;">船便ステータス</h4>
+					</a>
+					<div id="two_window"></div>
+				</div>
+
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div id="resizable3" class="ui-widget-content resize"  style="padding: 0px;">
+				<a href="jq/barchart/barchart.html">
+					<h4 class="ui-widget-header" style="margin-top: 0px;">前月取扱実績</h4>
+					</a>
+					<div id="three_window"></div>
+				</div>
+			</td>
+		
+			<td >
+				<div id="resizable4" class="ui-widget-content resize"  style="padding: 0px;">
+				<a href="d3-circle/circlechart.html"  rel="tool-tip" data-toggle="tooltip" data-placement="bottom" title="このサンプルの様に、各国（各倉庫）毎のステータスがひと目で分かる様に、円グラフで表現することが可能です。">
+					<h4 class="ui-widget-header" style="margin-top: 0px;">各国安全在庫率</h4>
+					</a>
+					<div id="four_window"></div>
+				</div>
+			</td>
+		
+		</tr>
+	</table>
+
+</body>

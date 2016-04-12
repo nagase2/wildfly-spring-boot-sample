@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<title>Practice for D3</title>
+</head>
+<body>
+
+<script src="../lib/d3.v3.min.js" charset="utf-8"></script>
+<script>
+	var dataset = [40,33,83,32,33,54];
+	var w = 800;
+	var h = 300;
+
+	var svg = d3.select("body").append("svg").attr({width:w, height:h});
+
+	svg.selectAll("circle")
+		.data(dataset)
+		.enter()
+		.append("circle")
+		.on("mouseover",function(d){
+			d3.select(this).attr("fill","orange");
+		})
+		.on("mouseout",function(d){
+			d3.select(this).attr("fill","red");
+		})
+		.on("click",function(d){
+			var rs = d3.select(this).attr("r");
+			alert(rs);
+		})
+		.transition()
+		.delay(function(d,i){
+			return i * 300;
+		})
+		.duration(1000)
+		.ease("bounce")
+		.each("start", function(){
+			d3.select(this).attr({
+				fill:"green", 
+				r:0,
+				cy:h
+			});
+		})
+		.attr({
+			cx:function(d,i){return 50 + (i * 100);},
+			cy: h / 2,
+			r: function(d){return d;}, //データの数字を半径に設定
+			fill:"red",
+			opacity:0.3 //半透明指定
+		})
+		// .each("end", function(){
+		// 	d3.select(this)
+		// 		.transition()
+		// 		.duration(800)
+		// 		.attr({
+		// 			fill:"blue", 
+		// 			r:0,
+		// 			cy:0
+		// 		});
+		// })
+
+		svg.selectAll("circle").append("text").text(
+			function(d){return d;});
+	
+
+</script>
+</body>

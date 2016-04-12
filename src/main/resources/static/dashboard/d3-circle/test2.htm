@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<title>Login</title>
+</head>
+<body>
+  <div id="login-form" class="panel">
+    <div class="panel-header">
+      <h1><img th:src="@{/webjars/ttc/img/logo.png}" alt="豊田通商" width="97" height="30" /></h1>
+    </div>
+    <div class="panel-content">
+      <form th:action="@{/login}" method="POST" class="form-horizontal">
+        <div class="field">
+          <label>Username:</label>
+          <input type="text" name="username" value="" placeholder="Username" />
+        </div>
+        <div class="field">
+          <label>Password:</label>
+          <input type="password" name="password" placeholder="Password" />
+        </div>
+        <div th:if="${param.logout}">You have been logged out.</div>
+
+        <ul class="form-messages" th:if="${param.containsKey('error') || param.containsKey('logout')}">
+          <li class="ui-state-error-text" th:if="${param.error}">Invalid username and password.</li>
+          <li class="ui-state-highlight-text" th:if="${param.logout}">You have been logged out.</li>
+        </ul>
+        <div class="form-buttons button-group button-group-start">
+          <input id="submit-button" type="submit" value="Log in" class="button-primary" />
+          <script type="text/javascript">
+            $(function() { new johndoe.Button({target: '#submit-button'}); });
+          </script>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

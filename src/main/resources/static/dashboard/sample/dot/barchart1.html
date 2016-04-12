@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<title>Practice for D3</title>
+	<style>
+		.axis path, .axis line{
+			fill : none;
+			stroke: black;
+		}
+		.axis text {
+			font-size: 11px;
+		}
+.brush .extent {
+  stroke: #fff;
+  fill:red;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+	</style>
+
+</head>
+<body>
+title２<br>
+<script src="../lib/d3.v3.min.js" charset="utf-8"></script>
+<script>
+	var dataset = [1,40,33,83,32,33,22];
+	var dataset2 = [22,23,2,1,2,3];
+	var w = 500;
+	var h = 300;
+	var padding = 10;
+
+	var xScale = d3.scale.linear()  //スケールを設定
+		.domain([0,d3.max(dataset)]) //入力値の最小値と最大値を指定
+		.nice() //スケールのメモリをナイスに調整
+		.clamp(true)
+		.range([padding,w-padding]); //有効な描画領域
+
+	var svg = d3.select("body").append("svg").attr({width:w, height:h});
+	var xAxis = d3.svg.axis()
+					.scale(xScale)
+					.orient("bottom");
+
+	var focus = svg.append("g")
+		.attr({
+			class:"axis", //上のStyleにてフォーマット指定
+			transform: "translate(0,180)" //メモリの位置調整
+		});
+		
+		focus.call(xAxis);	//横軸のメモリ表示
+
+	var line = svg.selectAll("rect")  //rect領域を選択（存在しない）
+		.data(dataset)
+		.enter()	//Rectは存在しないため、Enter領域が呼ばれる
+		.append("rect")	//四角を追加
+
+		.on("mouseover",function(d){
+			d3.select(this).attr("fill","orange");
+		})
+		.on("mouseout",function(d){
+			d3.select(this).attr("fill","red");
+		})
+		.on("click",function(d){
+			alert(d);
+		})
+		.transition() //アニメーションを行う設定
+		.delay(function(d,i){
+			return i * 300;
+		})
+		.duration(1000) //アニメーションにかかる時間
+		.ease("bounce")
+		.each("start", function(){
+			d3.select(this).attr({
+				fill:"green", 
+				width:0,
+				cy:h
+			});
+		})
+		.attr({
+			x:padding,
+			y: function(d,i){return i * 22;}, //Specify location of bar
+			width:function(d){ return xScale(d) -padding},
+			height: 20, //Specify size of bar
+			fill: "red",
+			rx:5, //丸角設定
+			ry:0
+		})
+		
+		
+	var brush = d3.svg.brush() //brushオブジェクト作成
+        .x(xScale) //x軸を選択可能範囲に指定
+        //.y(xScale) //x軸を選択可能範囲に指定
+        .on("brush", brushed);//イベント発生時に呼ばれる関数
+    
+     svg.append("g") //brushグループを作成
+        .attr("class", "x brush")
+        .call(brush)
+        .selectAll("rect")
+        .attr("y", -6)
+        .attr("height", h + 7);
+
+function brushed() {
+   xScale.domain(brush.empty() ? xScale.domain() : brush.extent());//選択されたデータセットの範囲をxScaleのdomainに反映
+  line.select("rect").attr("d", line);//上のグラフアップデート
+  line.select("axis").call(xAxis);//上のX軸アップデート
+  console.log(brush.extent());
+  //console.log("xScale",xScale(function(d){return d;}));
+}
+
+</script>
+</body>

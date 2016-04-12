@@ -95,7 +95,7 @@ dependencies {
 	//  testCompile 'org.spockframework:spock-core:1.0-groovy-2.3'
 	//  testCompile 'org.spockframework:spock-spring:1.0-groovy-2.3'
 }
-//configurations { runtime.exclude module: 'spring-boot-starter-tomcat' }
+configurations { runtime.exclude module: 'spring-boot-starter-tomcat' }
 
 
 

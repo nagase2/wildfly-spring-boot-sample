@@ -1,0 +1,41 @@
+#result {
+    text-align: right;
+    color: gray;
+    min-height: 2em;
+}
+#table-sparkline2 {
+    margin: 0 auto;
+    border-collapse: collapse;
+    height:100%;
+    
+}
+th {
+    font-weight: bold;
+    text-align: center;
+    
+}
+table.sparktable td, th {
+    padding: 3px;
+    border-bottom: 1px solid #f6f6f6;
+    min-height: 20px;
+    max-height: 40px;
+    margin: 0 auto; 
+    font-size: 12px;
+    text-align:center; 
+    vertical-align:middle;
+     font-size: 15px;
+    
+    
+}
+
+thead th {
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+.highcharts-tooltip>span {
+    background: white;
+    border: 1px solid silver;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px #888;
+    padding: 8px;
+}

@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<title>Practice for D3</title>
+</head>
+<body>
+	<p>Hello 1</p>
+	<p>Hello 2</p>
+	<p>Hello 3s3</p>
+
+
+<script src="../lib/d3.v3.min.js" charset="utf-8"></script>
+<script>
+	var dataset = [12,33,43,32,23];
+	// var tsvdataset = d3.tsv("dotdata.tsv");
+
+	// var dataset2 = [name:]
+	var p = d3.select("body").selectAll("p");
+	p.data(dataset).text(function(d,i){
+		return i + "番目は" + d +"です";
+	});
+
+</script>
+</body>

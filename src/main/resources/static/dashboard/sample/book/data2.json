@@ -1,0 +1,31 @@
+{
+  "nodes":[
+      {"name":"Supplier1"},
+      {"name":"Supplier2"},
+      {"name":"Supplier3"},
+       {"name":"Supplier4"},
+
+      {"name":"TH"},
+      {"name":"ID"},
+      {"name":"Mid"},
+      {"name":"TW"},
+      {"name":"AU"},
+      {"name":"Customer1"},
+      {"name":"Customer2"},
+      {"name":"Customer3"},
+      {"name":"Customer4"}
+ 
+    ],
+    "links":[
+      {"source":"s1","target":"s3","value":2},
+      {"source":"s2","target":"s3","value":2},
+      {"source":"s2","target":"s3","value":2},
+      {"source":"s2","target":"s3","value":2},
+      {"source":"s2","target":"s3","value":2},
+      {"source":"s2","target":"s3","value":2},
+      {"source":"s2","target":"s3","value":2},
+      {"source":"s2","target":"s3","value":2},
+      {"source":"s2","target":"s3","value":2},
+
+    ]
+}

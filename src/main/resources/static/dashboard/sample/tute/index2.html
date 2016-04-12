@@ -1,0 +1,480 @@
+
+<!DOCTYPE html>
+<html ng-app>
+
+<head>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.8/angular.min.js"></script>-->
+<script src="../lib/d3.v3.min.js"></script>
+<script src="../lib/crossfilter.v1.js"></script>
+<script src="../dc/js/dc.js"></script>
+<script src="../lib/jquery-2.0.3.js"></script>
+<script src="../bt/js/bootstrap.min.js"></script>
+
+<link href="../bt/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../bt/css/non-responsive.css" media="screen">
+<link href="../dc/css/dc.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<style>
+.navbar { /*background: #205081;
+*/
+	border-bottom: 1px solid #2e3d54;
+	color: #fff;
+	/*padding: 10px 0px;*/
+}
+
+h4 span {
+	font-size: 14px;
+	font-weight: normal;
+}
+ .row._18{
+  color:red;
+}
+</style>
+
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top" role="banner">
+		<a class="navbar-brand" href="#">Data analystics</a>
+		<ul class="nav navbar-nav">
+			<li class="dropdown"><a href="#" class="dropdown-toggle"
+				data-toggle="dropdown">Select Country <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="#" onclick="javascript:timeChart2.filterAll();timeChart.filterAll();dc.filterAll();dc.renderAll();">AU</a></li>
+					<li><a href="#">TH</a></li>
+					<li><a href="#">TW</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Separated link</a></li>
+					<li class="divider"></li>
+					<li><a href="#">One more separated link</a></li>
+				</ul></li>
+		</ul>
+		</form>
+	</nav>
+	<br>
+
+	<!-- start of program -->
+	<div class="container">
+			<div class="dc-data-count" style="float: left;">
+		<h3>
+			Total invoiced M3 through ORION <span> <span class="filter-count"></span>
+				selected out of <span class="total-count"></span> records | <a
+				href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+			</span>
+		</h3>
+	</div>
+		
+		<div class="row">
+			<div class="span12" id="dc-zikan-chart">
+				<h4>Total M3 per week
+						<span> <a class="reset"
+						href="javascript:timeChart.filterAll();dc.redrawAll();"
+						style="display: none;">reset</a></span>
+				</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span12" id="dc-zikan-chart2">
+			
+			</div>
+		</div>
+		<div class="row">
+			<div class="span6" id="export-chart">
+				<h4>Export country
+						<span> <a class="reset"
+						href="javascript:exportChart.filterAll();dc.redrawAll();"
+						style="display: none;">reset</a></span>
+				</h4>
+			</div>
+
+			<div class="span6" id="import-chart">
+				<h4>Import country
+						<span> <a class="reset"
+						href="javascript:importChart.filterAll();dc.redrawAll();"
+						style="display: none;">reset</a></span>
+				</h4>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="span4" id="dc-piechart1">
+				<h4>M3 By year <span> <a class="reset"
+						href="javascript:pChart1.filterAll();dc.redrawAll();"
+						style="display: none;">reset</a></span>
+				</h4>
+			</div>
+			<div class="span4" id="dc-piechart2">
+					<h4>M3 By Month <span> <a class="reset"
+							href="javascript:pChart2.filterAll();dc.redrawAll();"
+							style="display: none;">reset</a></span>
+					</h4>
+				</div>			
+			
+			<div class="span4" id="dc-piechart3">
+				<h4>M3 By Week <span> <a class="reset"
+						href="javascript:pChart3.filterAll();dc.redrawAll();"
+						style="display: none;">reset</a></span>
+				</h4>
+			</div>
+		</div>
+		<!--
+		<div class="row">
+			<div class="span6" id="dc-export-rowChart">
+				<h4>Export M3 <span> <a class="reset"
+						href="javascript:exportRowChart.filterAll();dc.redrawAll();"
+						style="display: none;">reset</a></span>
+				</h4>
+			</div>
+			<div class="span6" id="dc-import-rowChart">
+				<h4>Import M3
+					<a class="reset"
+						href="javascript:importRowChart.filterAll();dc.redrawAll();"
+						style="display: none;">reset</a></span>
+				</h4>
+			</div>
+		</div>
+		-->
+
+<hr>
+		<div class="row">
+			<table class="table table-hover table-condensed dc-data-table">
+				<thead>
+					<tr class="header">
+						<th>ETA</th>
+						<th>Export</th>
+						<th>Import</th>
+						<th>Buying Currency</th>
+						<th>Selling Currency</th>
+						<th>Buying Price</th>
+						<th>Selling Price</th>
+						<th>M3</th>
+						<th>Count</th>
+					</tr>
+				</thead>
+			</table>
+
+		</div>
+
+
+		<script>
+//遶ｭ�ｽreate the dc chart object & link to 
+var dataTable = dc.dataTable(".dc-data-table");
+var timeChart = dc.lineChart("#dc-zikan-chart");
+
+// 			var magnitudeChart = dc.barChart("#dc-magnitude-chart");
+// 			var depthChart = dc.barChart("#dc-depth-chart");
+var timeChart2 = dc.barChart("#dc-zikan-chart2");
+// 			var islandChart = dc.pieChart("#dc-island-chart");
+var exportChart = dc.barChart("#export-chart");
+var importChart = dc.barChart("#import-chart");
+
+var exportRowChart = dc.rowChart("#dc-export-rowChart");
+var importRowChart = dc.rowChart("#dc-import-rowChart");
+
+var pChart1 = dc.pieChart("#dc-piechart1");
+var pChart2 = dc.pieChart("#dc-piechart2");
+var pChart3 = dc.pieChart("#dc-piechart3");
+//Load csv file
+d3.csv("../data/InvoiceDetail.csv", function(data) {
+
+	//2013-07-23T18:26:30.229,175.5516
+	var etaFormat = d3.time.format("%Y/%m/%d");
+
+	data.forEach(function(d) {
+		d.etaDate = etaFormat.parse(d.ETA)
+		d.eRegion = d.EXP_REGION_CODE;
+		d.iRegion = d.IMP_REGION_CODE;
+		d.iCurrency = d.EXP_INVOICE_CURRENCY;
+		d.mCurrency = d.MID_INVOICE_CURRENCY;
+		d.ePrice = +d.EXP_PRICE;
+		d.mPrice = +d.MID_PRICE;
+		d.m3 = +d.M3;  //Numeric
+		d.cnt = +d.CNT; //Numeric
+	});
+
+	//遶ｭ�｡Create dataTable Dimension
+	var facts = crossfilter(data);
+	// var timeDimension = facts.dimension(function(d) {
+	// 	//return d.etaDate;
+	// 	return d3.time.month(d.etaDate);
+	// });
+
+	var timeDimension = facts.dimension(function(d) {
+		return d3.time.week(d.etaDate);
+	});
+
+	var exportRegion = facts.dimension(function(d) {
+		return d.eRegion;
+	});
+	var importRegion = facts.dimension(function(d) {
+		return d.iRegion;
+	});
+
+
+
+	var volumeByetaGroup = timeDimension.group().reduceSum(
+			function(d) {
+				 //return d.mPrice-d.ePrice;
+				return d.m3;
+			});
+	var volumeByetaGroup2 = timeDimension.group().reduceSum( 
+			function(d) {
+				// return d.mPrice-d.ePrice;
+				return d.m3;
+			});
+
+	// var volumeByetaGroup2 = timeDimension.group(d3.time.day)
+
+	// 								var volumeByHourGroup2 = volumeByHour.group()
+	// 										.reduceCount(function(d) {
+	// 											return d.dtg;
+	// 										});
+	var eRegGroup = exportRegion.group().reduceSum(
+			function(d) {
+				// return d.mPrice;
+				return d.m3;
+			});
+	var iRegGroup = importRegion.group().reduceSum( //reduceSum
+			function(d) {
+				// return d.mPrice;
+				return d.m3;
+			});
+	
+var formatter = d3.format(",.0f");
+var dateformatter = d3.format("%Y/%m/%d")
+
+	timeChart.renderArea(true).width(960).height(150).margins({
+		top : 10,
+		right : 20,
+		bottom : 20,
+		left : 100
+	}).dimension(timeDimension)
+	//.mouseZoomable(true)
+	// Specify a range chart to link the brush extent of the range with the zoom focue of the current chart.
+	.rangeChart(timeChart2)
+	.group(volumeByetaGroup)
+			.transitionDuration(500)
+			.renderHorizontalGridLines(true).brushOn(false).title(
+					function(d) {
+						return 	(d.key.getYear()+1900) + "/" + (d.key.getMonth()+1) + "/" + d.key.getDate() + ":" + formatter(d.value);
+					}).elasticY(false)
+			//.gap(1)
+			.x(
+					d3.time.scale().domain(
+							[ new Date(2010, 7, 01),
+									new Date(2013, 12, 1) ])
+					//	.rangeRound([0, 10 * 12900])
+
+				)
+			//.xAxis().ticks(10)
+			.xUnits(d3.time.months)
+
+
+	timeChart2.width(960).height(80).margins({
+		top : 10,
+		right : 10,
+		bottom : 20,
+		left : 100
+	}).dimension(timeDimension)
+	.group(volumeByetaGroup2)
+	//.round(d3.time.month.round) /////////test///////
+			.transitionDuration(500).brushOn(true).title(
+					function(d) {
+						return "-------------------"
+					}).elasticY(true)
+				.x(
+					d3.time.scale().domain(
+							[ new Date(2010, 7, 1),
+									new Date(2013, 12, 1) ])
+					//.rangeRound(30*7*24)
+					.rangeRound([0, 960 ]) //////test///////////
+					
+				)
+				//.round(d3.time.day.round) //sepecify unit of select range 
+				//.x(d3.scale.linear().domain([2010,2020]))	
+			  //.centerBar(true)
+				.gap(1)
+				.xUnits(d3.time.weeks)
+				.renderHorizontalGridLines(true)
+				.renderVerticalGridLines(true)
+				//.xAxis().ticks(5)
+			.yAxis().ticks(3);
+
+	
+	
+	//xxxxxxxxxxxxxxxxxx
+	exportChart.width(480).height(150).margins({
+		top : 10,
+		right : 0,
+		bottom : 20,
+		left : 70
+	}).dimension(exportRegion)
+	  
+		.group(eRegGroup)
+		.colors(d3.scale.category10())
+		.transitionDuration(500)
+		//.centerBar(true).gap(1)
+		//.filter([3,5])
+			.x(
+					
+					d3.scale.ordinal()
+				   // .rangeRoundBands([0, 480])
+		// .domain(["TH","ID","c","d"])
+		)
+		.xUnits(dc.units.ordinal)
+		.gap(10)
+		.elasticY(true)
+		.renderHorizontalGridLines(true)
+		.xAxis().tickFormat()
+		exportChart.yAxis().ticks(5);
+	
+	importChart.width(480).height(150).margins({
+		top : 10,
+		right : 0,
+		bottom : 20,
+		left : 60
+	}).dimension(importRegion)  
+		.group(iRegGroup)
+		.transitionDuration(500)
+			.x(
+				d3.scale.ordinal()
+		)
+		.xUnits(dc.units.ordinal)
+		.elasticY(true)
+		.renderHorizontalGridLines(true)
+		.xAxis().tickFormat();
+		importChart.yAxis().ticks(5);
+		
+		
+	//Rowchart?
+	exportRowChart.width(480).height(500).margins({
+		top : 5,
+		right : 0,
+		bottom : 20,
+		left : 10
+	}).dimension(exportRegion).group(eRegGroup).colors(
+			d3.scale.category20()).label(function(d) {
+		return d.key;
+	}).title(function(d) {
+		return d.value+ ":" +d.key;
+	}).elasticX(true).gap(1)
+	.xAxis().ticks(6);
+	
+
+	// islandChart.width(250).height(220).radius(100).innerRadius(10)
+	// 		.dimension(islands).group(islandsGroup).colors(
+	// 				d3.scale.category20()).title(function(d) {
+	// 			return d.value;
+	// 		})
+	
+	//Rowchart?
+	importRowChart.width(480).height(500).margins({
+		top : 5,
+		left : 10,
+		right : 0,
+		bottom : 20
+	}).dimension(importRegion).group(iRegGroup).colors(
+			d3.scale.category20()).label(function(d) {
+		return d.key;
+	}).title(function(d) {
+		return d.value+ ":" +d.key;
+	}).elasticX(true).gap(1)
+	.xAxis().ticks(6);
+	//.y(d3.scale.linear().domain([0,400]))
+	
+
+	// islandChart.width(250).height(220).radius(100).innerRadius(10)
+	// 		.dimension(islands).group(islandsGroup).colors(
+	// 				d3.scale.category20()).title(function(d) {
+	// 			return d.value;
+	// 		})
+
+
+
+  var pieDimension1 = facts.dimension(function(d) {
+    return (d.etaDate.getYear()+1900);
+  });
+  var pieGroup1 = pieDimension1.group().reduceSum(
+			function(d) {
+				return d.m3;
+			});
+  pChart1.width(250)
+    .height(220)
+    .radius(100)
+    .innerRadius(10)
+    .dimension(pieDimension1)
+    .group(pieGroup1)
+    .colors(d3.scale.category20())
+    // .title(function(d) {
+    //   return d.key.getYear();
+    // })
+  var pieDimension2 = facts.dimension(function(d) {
+    return (d.etaDate.getMonth()+1);
+  });
+  var pieGroup2 = pieDimension2.group().reduceSum(
+			function(d) {
+				return d.m3;
+			});
+  pChart2.width(250)
+    .height(220)
+    .radius(100)
+    .innerRadius(10)
+    .dimension(pieDimension2)
+    .group(pieGroup2)
+    .colors(d3.scale.category20())
+
+  var pieDimension3 = facts.dimension(function(d) {
+    return (d.etaDate.getDay()+1);
+  });
+  var pieGroup3 = pieDimension3.group().reduceSum(
+			function(d) {
+				return d.m3;
+			});
+  pChart3.width(250)
+    .height(220)
+    .radius(100)
+    .innerRadius(10)
+    .dimension(pieDimension3)
+    .group(pieGroup3)
+    .colors(d3.scale.category10())
+
+//Data Table
+	dataTable.width(960).height(800).dimension(timeDimension)
+			.group(function(d) {
+				return d.iRegion;
+			}).size(100).columns([ function(d) {
+				//return d.etaDate;
+				return (d.etaDate.getYear()+1900) + "/" + (d.etaDate.getMonth()+1) + "/" + d.etaDate.getDate();
+			}, function(d) {
+				return d.eRegion;
+			}, function(d) {
+				return d.iRegion;
+			}, function(d) {
+				return d.iCurrency;
+			}, function(d) {
+				return d.mCurrency;
+			}, function(d) {
+				return d.ePrice;
+			}, function(d) {
+				return d.mPrice;
+			}, function(d) {
+				return d.m3;
+			}, function(d) {
+				return d.cnt;
+			} ]).sortBy(function(d) {
+				return d.etaDate;
+			}).order(d3.ascending);
+
+	//Count and filter count             
+	var all = facts.groupAll();
+	dc.dataCount(".dc-data-count").dimension(facts).group(all);
+
+	// console.log(timeDimension);
+
+	dc.renderAll();
+
+});
+</script>
+</body>
+
+</html>
+

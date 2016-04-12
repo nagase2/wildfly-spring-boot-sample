@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html >
+  <head profile="http://www.w3.org/2005/10/profile">
+<title>データ見える化・解析サンプル</title> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script>
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+});
+
+</script>
+<style type="text/css">
+    .bs-example{
+    	margin: 20px;
+    }
+</style>
+  
+
+<link rel="icon" 
+      type="image/png" 
+      href="icon.png">
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">豊通シスコム　品質改善室</a>
+    </div>
+</nav>
+
+  
+  <h2><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>　データ見える化/解析Demoページ</h2>
+ 
+　  データの解析、分析ソリューションのポータルページです。
+  
+  </br> </br>
+ 
+  <table class="table table-hover">
+	      <thead>
+	        <tr>
+	          <th>#</th>
+          <th width="200">
+            タイトル
+          </th>
+          <th>
+            説明
+          </th>
+          <th>
+            備考
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+ 	<tr>
+          <th class="text-nowrap" scope="row"></th>
+          <td> <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+          <a href="http://172.19.6.89:5601/#/dashboard/%E3%83%80%E3%83%83%E3%82%B7%E3%83%A5%E3%83%9C%E3%83%BC%E3%83%89%EF%BC%92?_g=(refreshInterval:(display:Off,pause:!f,section:0,value:0),time:(from:'2012-09-24T02:55:34.451Z',mode:relative,to:'2016-01-06T04:41:10.451Z'))&_a=(filters:!(),panels:!((col:9,id:'11_%E5%A4%96%E8%B2%A8%E3%82%B3%E3%83%BC%E3%83%89',row:3,size_x:4,size_y:2,type:visualization),(col:1,id:EAST%E3%81%A7%E3%82%88%E3%81%8F%E4%BD%BF%E3%82%8F%E3%82%8C%E3%81%A6%E3%81%84%E3%82%8B%E6%A9%9F%E8%83%BD,row:11,size_x:12,size_y:3,type:visualization),(col:9,id:%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97%E3%80%81%E5%8B%98%E5%AE%9A%E7%A7%91%E7%9B%AE,row:5,size_x:4,size_y:3,type:visualization),(col:1,id:%E5%A3%B2%E6%8E%9B%E9%87%91%E7%99%BA%E7%94%9F%E4%BB%B6%E6%95%B0%E3%83%99%E3%82%B9%E3%83%885,row:8,size_x:8,size_y:3,type:visualization),(col:9,id:EAST%E3%83%AD%E3%82%B0-%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0ID%E5%88%86%E6%9E%90,row:8,size_x:4,size_y:3,type:visualization),(col:9,id:total-count,row:1,size_x:4,size_y:2,type:visualization),(col:1,id:%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97%E5%88%A5%E3%83%87%E3%83%BC%E3%82%BF%E5%88%86%E6%9E%90,row:1,size_x:8,size_y:4,type:visualization),(col:1,id:%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97%E3%81%94%E3%81%A8%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E4%BB%B6%E6%95%B0,row:5,size_x:8,size_y:3,type:visualization)),query:(query_string:(analyze_wildcard:!t,query:'*')),title:%E3%83%80%E3%83%83%E3%82%B7%E3%83%A5%E3%83%9C%E3%83%BC%E3%83%89%EF%BC%92)" data-toggle="tooltip" data-placement="right"
+           title="（リアルタイム解析）">
+           	 Bigデータ解析サンプル</a>
+          </td>
+          <td>
+          	No SQLのElasticsearchとKibanaを利用し、９千万件のデータを解析するサンプルです。</td>
+          <td>９千万件のデータのデータの解析が数秒で完了することを確認できます。
+          </td>
+        </tr>
+
+
+        
+       <tr>
+          <th class="text-nowrap" scope="row"></th>
+          <td> <span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
+          <a href="dashboard.html" data-toggle="tooltip" data-placement="right" title="ダッシュボード">
+           	 ダッシュボード</a>
+          </td>
+          <td>
+          	ダッシュボードサンプルです。</td>
+          <td>
+         	 実現にはhightchartを利用しており、別途ライセンスの購入が必要となる。
+          </td>
+        </tr>
+
+       
+        <tr>
+          <th class="text-nowrap" scope="row"></th>
+          <td> <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
+          <a href="d3-liner/index.html" data-toggle="tooltip" data-placement="right"
+           title="多重ライン">
+           	 多重ラインチャート</a>
+          </td>
+          <td>
+          	多重ラインチャートのサンプルです。複数のデータの解析結果を１つのグラフにまとめることにより、標準から外れたデータの発見ができます。</td>
+          <td>
+          </td>
+        </tr>
+
+<!-- 
+        <tr>
+          <th class="text-nowrap" scope="row"></th>
+          <td> <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+          <a href="sample/tute/index2.html" data-toggle="tooltip" data-placement="right"
+           title="リアルタイム解析">
+           	 倉庫取扱量解析</a>
+          </td>
+          <td>
+          	過去データを解析し、輸入・輸出倉庫のM3量を見える化しました。
+          </td>
+          <td>
+          </td>
+        </tr>
+                 <tr>
+          <th class="text-nowrap" scope="row"></th>
+          <td> <span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
+          <a href="sample/book/sanky1.html" data-toggle="tooltip" data-placement="right" title="関連グラフ">
+           	 関連グラフ</a>
+          </td>
+          <td>
+          	関連グラフのサンプルです。</td>
+          <td>情報間のつながりを見える化することができる。<br>
+         	 D3.jsというライブラリを利用しており、無料で利用できる。
+          </td>
+        </tr>
+          </tr>
+             -->  
+     </html>                                		
