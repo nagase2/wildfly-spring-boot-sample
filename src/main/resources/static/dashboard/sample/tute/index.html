@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<html ng-app>
+
+  <head>
+   <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.8/angular.min.js"></script>-->
+       <script src="../lib/d3.v3.min.js"></script>
+        <script src="../lib/crossfilter.v1.js"></script>
+     <script src="../dc/js/dc.js"></script>
+   <script src="../lib/jquery-2.0.3.js"></script>
+    <script src="../bt/js/bootstrap.min.js"></script>
+
+ <link href="../bt/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../dc/css/dc.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <style>
+  .navbar {
+/*background: #205081;
+*/
+border-bottom: 1px solid #2e3d54;
+color: #fff;
+/*padding: 10px 0px;*/
+}
+h4 span {
+    font-size:14px;
+    font-weight:normal;
+    }
+
+
+
+</style>
+
+  <body>
+<nav class="navbar navbar-default navbar-fixed-top" role="banner" >
+  <a class="navbar-brand" href="#">DC demo..</a>
+
+ <ul class="nav navbar-nav">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select Country <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">AU</a></li>
+          <li><a href="#">TH</a></li>
+          <li><a href="#">TW</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Separated link</a></li>
+          <li class="divider"></li>
+          <li><a href="#">One more separated link</a></li>
+        </ul>
+      </li>
+    </ul>
+   </form>
+</nav>
+<br><br><br><hr>
+<div class="dc-data-count" style="float: left;">
+    <h2>New Zealand Earthquakes
+      <span>
+        <span class="filter-count"></span>
+         selected out of 
+        <span class="total-count"></span>
+         records | 
+        <a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+      </span>
+    </h2>
+</div><br>
+<!-- start of program -->
+<div class="container">
+<div class="row">
+  <div class="span6" id="dc-magnitude-chart">
+    <h4>Events by Magnitude</h4>
+  </div>
+  <div class="span6" id="dc-depth-chart">
+    <h4>Events by Depth(km)</h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12" id="dc-zikan-chart">
+    <h4>Events per hour</h4>
+  </div>
+</div>
+<div class="row">
+  <div class="span12" id="dc-zikan-chart2">
+    <h4>Events per hour2</h4>
+  </div>
+</div>
+<div class="row">
+  <div class="span4" id="dc-dayweek-chart">
+    <h4>Day of the Week
+      <span>
+        <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();" style="display:none;">reset</a></span>
+        </h4>
+  </div>
+  <div class="span4" id="dc-island-chart">
+    <h4>North or South Island</h4>
+
+  </div>
+  <div class="span4" id="blank2">
+    <h4>Blank 23</h4>
+  </div>
+</div>
+
+  <div class="row">
+        <table class="table table-hover table-condensed dc-data-table">
+          <thead>
+            <tr class="header">
+              <th>DTG</th>
+              <th>Lat</th>
+              <th>Long</th>
+              <th>Magnitutde</th>
+              <th>google Map</th>
+              <th>OSM Map</th>
+              <th>aa</th>
+            </tr>
+          </thead>
+        </table>
+    
+    </div>
+
+
+<script>
+//①Create the dc chart object & link to 
+var dataTable = dc.dataTable(".dc-data-table");
+var magnitudeChart = dc.barChart("#dc-magnitude-chart");
+
+var depthChart = dc.barChart("#dc-depth-chart");
+var timeChart= dc.lineChart("#dc-zikan-chart");
+var timeChart2= dc.barChart("#dc-zikan-chart2");
+var dayOfWeekChart = dc.rowChart("#dc-dayweek-chart");
+var islandChart = dc.pieChart("#dc-island-chart");
+
+
+//Load csv file
+d3.csv("quakes.csv",function(data){
+
+//2013-07-23T18:26:30.229,175.5516
+var dtgFormat = d3.time.format("%Y-%m-%dT%H:%M:%S");
+
+data.forEach(function(d){
+  d.dtg = dtgFormat.parse(d.origintime.substr(0,19))
+  d.lat = +d.latitude; //数値型にPurse
+  d.long = +d.longitude;
+  d.mag = d3.round(+d.magnitude,1);
+  d.depth = d3.round(+d.depth,0);
+});
+
+//②Create dataTable Dimension
+var facts = crossfilter(data);
+var timeDimension = facts.dimension(function(d){
+  return d.dtg;
+});
+var magValue = facts.dimension(function(d){
+  return d.mag;
+});
+var depthValue = facts.dimension(function(d){
+  return d.depth;
+});
+var volumeByHour = facts.dimension(function(d){
+  return d3.time.hour(d.dtg);
+});
+var volumeByHour2 = facts.dimension(function(d){
+  return d3.time.hour(d.dtg);
+});
+var dayOfWeek = facts.dimension(function (d) {
+    var day = d.dtg.getDay();
+    switch (day) {
+      case 0:
+        return "0.Sun";
+      case 1:
+        return "1.Mon";
+      case 2:
+        return "2.Tue";
+      case 3:
+        return "3.Wed";
+      case 4:
+        return "4.Thu";
+      case 5:
+        return "5.Fri";
+      case 6:
+        return "6.Sat";
+    }
+  });
+var islands = facts.dimension(function(d){
+  if(d.lat <= -40.855907 && d.long <= 174.990607)
+    return "South";
+  else if(d.lat <= -37.555907 && d.long <= 176.590607)
+    return "Middle";
+  else
+    return "North";
+});
+
+
+//③ make group
+var magValueGroupCount = magValue.group().reduceCount(function(d){
+  return d.mag;
+});
+var depthValueGroup = depthValue.group();
+var volumeByHourGroup = volumeByHour.group()
+  .reduceCount(function(d){
+    return d.dtg;
+  });
+  var volumeByHourGroup2 = volumeByHour.group()
+  .reduceCount(function(d){
+    return d.dtg;
+  });
+var dayOfWeekGroup = dayOfWeek.group();
+var islandsGroup = islands.group();
+
+
+//④bar chart
+magnitudeChart.width(480)
+  .height(150)
+  .margins({top:10,right:10,bottom:20,left:40})
+  .dimension(magValue)
+  .group(magValueGroupCount)
+ // .transitionDuration(500)
+  .centerBar(true)
+  .gap(65)
+  //.filter([3,5])
+  .x(d3.scale.linear().domain([0.5,7.5]))
+  .elasticY(true)
+  .xAxis().tickFormat();
+
+depthChart.width(480)
+  .height(150)
+  .margins({top:10,right:10,bottom:20,left:40})
+  .dimension(depthValue)
+  .group(depthValueGroup)
+  .transitionDuration(500)
+  .centerBar(true)
+  .gap(1)
+  .x(d3.scale.linear().domain([0,100]))
+  .elasticY(true)
+  .xAxis().tickFormat(function(v){return v;});
+
+timeChart
+  .renderArea(true)
+  .width(960)
+  .height(150)
+  .margins({top:10, right:10, bottom:20,left:40})
+  .dimension(volumeByHour)
+  // .mouseZoomable(true)
+        // Specify a range chart to link the brush extent of the range with the zoom focue of the current chart.
+  .rangeChart(timeChart2)
+  .group(volumeByHourGroup)
+  .transitionDuration(500)
+  .renderHorizontalGridLines(true)
+  .brushOn(false)
+  .title(function(d){
+    return "¥nNumber of Events: "
+  })
+  .elasticY(true)
+  //.gap(1)
+  .x(d3.time.scale().domain([new Date(2013,6,18),new Date(2013,6,20)]))
+  .xAxis().ticks(20);
+
+timeChart2.width(960)
+  .height(50)
+  .margins({top:10, right:10, bottom:20,left:40})
+  .dimension(volumeByHour2)
+  .group(volumeByHourGroup2)
+  .transitionDuration(500)
+  .brushOn(true)
+  .title(function(d){
+    return "¥nNumber of Events: "
+  })
+  .elasticY(true)
+  .x(d3.time.scale().domain([new Date(2013,6,18),new Date(2013,6,20)]).nice(10))
+  //.xAxis().ticks(5)
+  .yAxis().ticks(3);
+
+dayOfWeekChart.width(300)
+    .height(220)
+    .margins({top:5,left:10,right:10,bottom:20})
+    .dimension(dayOfWeek)
+    .group(dayOfWeekGroup)
+    .colors(d3.scale.category10())
+    .label(function(d){
+      return d.key.split(".")[1];
+    })
+    .title(function(d){return d.value;})
+    .elasticX(true)
+    //.y(d3.scale.linear().domain([0,400]))
+    .xAxis().ticks(6);
+
+islandChart.width(250)
+  .height(220)
+  .radius(100)
+  .innerRadius(10)
+  .dimension(islands)
+  .group(islandsGroup)
+  .colors(d3.scale.category20())
+  .title(function(d){return d.value;})
+
+
+dataTable.width(960).height(800).dimension(timeDimension)
+.group(function(d){return "Earthquake Table";})
+.size(100).columns([
+  function(d){return d.dtg;},
+  function(d){return d.lat;},
+  function(d){return d.long;},
+  function(d){return d.depth;},
+  function(d){return d.mag;},
+  function(d){return '<a href=¥"http://maps.google.com/maps?z=12&t=m&q=loc:' + d.lat + '+' + d.long + 'target=_blank¥">Google Map</a>';},
+  function(d){return "OSM Map";}
+  ])
+.sortBy(function(d){return d.dtg;})
+.order(d3.ascending);
+
+//Count and filter count
+var all = facts.groupAll();
+dc.dataCount(".dc-data-count")
+.dimension(facts)
+.group(all);
+
+// console.log(timeDimension);
+
+dc.renderAll();
+
+
+});
+
+
+
+
+</script>
+    
+
+
+    <script src="script.js"></script>
+  </body>
+
+</html>
+

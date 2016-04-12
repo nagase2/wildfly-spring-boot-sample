@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html ng-app>
+
+  <head>
+   <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.8/angular.min.js"></script>-->
+ <link href="../bt/css/bootstrap.min.css" rel="stylesheet">
+ <link rel="stylesheet" href="css/non-responsive.css" media="screen">
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <style>
+  .navbar {
+//background: #205081;
+//border-bottom: 1px solid #2e3d54;
+color: #fff;
+//padding: 10px 0px;
+}
+.arrow_box {
+  /*Test prop */
+  margin: 1px;
+   line-height:16px;
+   
+	position: relative;
+	background: #000000;
+	color:white;
+	vertical-align:middle;
+	border: 1px solid #6b6a6a;
+	padding: 3px;
+	width: 150px;
+ height: auto;
+border-radius: 3px;
+font:12px /*sans-serif*/;
+}
+
+.arrow_box:after, .arrow_box:before {
+	top: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.arrow_box:after {
+	border-color: rgba(31, 124, 143, 0);
+	border-top-color: #837c8f;
+	border-width: 10px;
+	margin-left: -10px;
+}
+.arrow_box:before {
+	border-color: rgba(107, 106, 106, 0);
+	border-top-color: #000000;
+	border-width: 11px;
+	margin-left: -11px;
+}
+
+</style>
+
+  <body>
+<nav class="navbar navbar-default navbar-fixed-top" role="banner" >
+  <a class="navbar-brand" href="#">Relation Graph</a>
+  <div class="btn-group">
+    <button type="button" class="btn btn-default navbar-btn" onclick="setFileName('data_country.csv','1000')">Country-Country</button>
+    <button type="button" class="btn btn-default navbar-btn" onclick="setFileName('fulldata.csv','5000')">All Supplier-Customer</button>
+    <button type="button" class="btn btn-default navbar-btn" onclick="setFileName('data_detail.csv','5000')">FullDetail</button>
+  </div>
+ <ul class="nav navbar-nav">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select Country <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#" onclick="setFileName('Data_AR.csv','1000')"><b>AR</b></a></li>
+          <li><a href="#" onclick="setFileName('Data_MY.csv','2000')"><b>MY</b></a></li>
+          <li><a href="#" onclick="setFileName('Data_PH.csv','1000')">PH</a></li>
+          <li><a href="#" onclick="setFileName('Data_ID.csv','2000')">ID</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Separated link</a></li>
+          <li class="divider"></li>
+          <li><a href="#">One more separated link</a></li>
+        </ul>
+      </li>
+    </ul>
+    
+     <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="From">
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="To">
+      </div>
+   </form>
+</nav>
+<br><br><br>
+
+
+
+    <p id="chart">
+    
+
+    <script src="../lib/d3.v3.min.js"></script>
+ 
+    <script src="sankey.js"></script>
+ 
+
+       <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../lib/jquery-2.0.3.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../bt/js/bootstrap.min.js"></script>
+    
+          <script src="script.js"></script>
+   
+  </body>
+
+</html>
+

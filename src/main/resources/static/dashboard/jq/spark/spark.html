@@ -1,0 +1,118 @@
+<html>
+<head>
+
+</head>
+<body>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<link href="/dashboard/jq/spark/spark.css" rel="stylesheet">
+<script src="/dashboard/jq/spark/spark.js"></script>
+
+
+
+<table id="table-sparkline" class="sparktable" width="100%">
+    <thead>
+        <tr>
+            <th>品番</th>
+            <th>数量</th>
+             <th>数量推移</th>
+            <th>安全在庫率</th>
+            <th>安全在庫率推移</th>
+        </tr>
+    </thead>
+    <tbody id="tbody-sparkline">
+        <tr>
+            <th>PARTS-1234</th>
+            <td class="count" width=50 align="right">254</td>
+            <td data-sparkline2="100, 20, 200, 50, 100, 50, 50, 50, 90, 0" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>90%</td>
+            <td data-sparkline2="500, 50, 20, -50, -10, 10, -30, 50, -30, 10 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+        <tr>
+            <th>PARTS-3333</th>
+            <td class="count" width=50 align="right">11</td>
+            <td data-sparkline2="120, 200, 200, 50, 32, 50, 20, 50, 10, 45" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>180%</td>
+            <td data-sparkline2="10, 50, 20, -0, -10, 10, -30, -50, 30, 10 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+        <tr>
+            <th>PARTS-1345</th>
+            <td class="count" width=50 align="right">234</td>
+            <td data-sparkline2="100, 200, 500, 50, 11 50, 50, 50, 200, 0" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>20%</td>
+            <td data-sparkline2="-80, 50, 20, -50, -10, -79, -30, 50, 10, 80 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+        <tr>
+            <th>PARTS-6543</th>
+            <td class="count" width=50 align="right">254</td>
+            <td data-sparkline2="100, 200, 500, 50, 1000, 50, 50, 50, 200, 0" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>50%</td>
+            <td data-sparkline2="100, -40, 20, -50, -110, 10, 30, 50, 30, -10 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+        <tr>
+            <th>PARTS-3466</th>
+            <td class="count" width=50 align="right">2345</td>
+            <td data-sparkline2="100, 11, 100, 50, 11, 80, 50, 50, 100, 11" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>105%</td>
+            <td data-sparkline2="100, 50, 20, -50, -10, 10, -30, 50, -30, 10 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+        <tr>
+            <th>PARTS-6553</th>
+            <td class="count" width=50 align="right">632</td>
+            <td data-sparkline2="100, 11, 100, 50, 11 50, 50, 100, 80, 70" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>30%</td>
+            <td data-sparkline2="100, 50, 20, -50, -10, 10, -30, 50, -30, 10 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+        <tr>
+            <th>PARTS-2234</th>
+            <td class="count" width=50 align="right">246</td>
+            <td data-sparkline2="100, 11, 200, 50, 61, 10, 50, 50, 60, 0" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>90%</td>
+            <td data-sparkline2="10, 50, 60, -50, -10, 10, -30, -30, -10, 10 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+        <tr>
+            <th>PARTS-2344</th>
+            <td class="count" width=50 align="right">1098</td>
+            <td data-sparkline2="100, 11, 400, 50, 11 50, 50, 150, 60, 70" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>100%</td>
+            <td data-sparkline2="10, 50, 20, -10, -10, 100, -30, 50, -10, 56 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+        <tr>
+            <th>PARTS-1122</th>
+            <td class="count" width=50 align="right">333</td>
+            <td data-sparkline2="100, 11 500, 50, 11 50, 50, 50, 200, 0" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>60%</td>
+            <td data-sparkline2="100, 50, 20, -50, -10, 10, -30, 50, -30, 10 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+        <tr>
+            <th>PARTS-3445</th>
+            <td class="count" width=50 align="right">832</td>
+            <td data-sparkline2="100, 11,200, 10, 51, 10, 80, 50, 30, 50" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>30%</td>
+            <td data-sparkline2="100, 50, 20, -50, -10, 10, -30, 50, -30, 10 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+               <tr>
+            <th>PARTS-2222</th>
+            <td class="count" width=50 align="right">234</td>
+            <td data-sparkline2="80, 11, 100, 33, 11, 30, 10, 50, 30, 50" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>150%</td>
+            <td data-sparkline2="100, 50, 20, -50, -10, 10, -30, 50, -30, 10 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+               <tr>
+            <th>PARTS-4333</th>
+            <td class="count" width=50 align="right">134</td>
+            <td data-sparkline2="10, 30, 23, 50, 11, 40, 30, 50, 110, 0" data-sub="xx, aa, ee, ee, ee, xx, oo"/>
+            <td align=center>130%</td>
+            <td data-sparkline2="100, 50, 20, -50, -10, 10, -30, 50, -30, 10 ; column" data-sub="xx, xxxxxx, ee, ee, ee, xx, oo"/>
+        </tr>
+        
+               
+    </tbody>
+</table>
+
+<div id="result"></div>
+</body></html>

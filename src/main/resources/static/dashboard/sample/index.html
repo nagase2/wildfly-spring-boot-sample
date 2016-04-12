@@ -1,0 +1,40 @@
+
+<html>
+<header>
+<script src="lib/d3.v3.min.js"></script>
+</header>
+<style>
+
+.chart div {
+  font: 10px sans-serif;
+  background-color: steelblue;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+}
+
+</style>
+<script>
+d3.select(".chart")
+.selectAll("div")
+  .data(data)
+.enter().append("div")
+  .style("width", function(d) { return d * 10 + "px"; })
+  .text(function(d) { return d; });
+
+</script>
+
+
+<a href="Barchart.html">Barchart</a><br>
+<a href="dotcircle.html">Dot Install sample1</a><br>
+<a href="book/sanky1.html">sanky</a><br>
+<a href="dc/index.html">Dc Demo</a><br>
+<a href="tute/index.html">Dc Tutereal</a><br>
+<a href="crossfilter/index.html">Crossfilter</a><br>
+<a href="tute/index2.html">M3 History</a><br>
+<a href="tute/index2.html">NZ earth quake</a>
+
+v1222
+release1.0 desu
+</html>

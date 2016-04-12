@@ -1,0 +1,452 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"pro",
+				"properties"
+			],
+			[
+				"depen",
+				"dependency"
+			],
+			[
+				"magnitude",
+				"magnitudeChart"
+			],
+			[
+				"magva",
+				"magValueGroupCount"
+			],
+			[
+				"dataset",
+				"dataset2"
+			],
+			[
+				"x",
+				"xScale"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"he",
+				"barHeight"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "ava -Dexec.mainClass=org.springframework.batch.core.launch.support.CommandLineJobRunner -Dexec.args=\"com.test.config.HelloWorldJobConfig helloWorldJob\"",
+			"settings":
+			{
+				"buffer_size": 151,
+				"line_ending": "Unix",
+				"name": "ava -Dexec.mainClass=org.springframework.batch.cor"
+			}
+		},
+		{
+			"file": "life.js",
+			"settings":
+			{
+				"buffer_size": 4133,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "index.html",
+			"settings":
+			{
+				"buffer_size": 2537,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "life.css",
+			"settings":
+			{
+				"buffer_size": 1633,
+				"line_ending": "Unix",
+				"name": "body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,f"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 167.0,
+		"selected_items":
+		[
+			[
+				"preference",
+				"Preferences: Settings - Default"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"comment",
+				"Toggle Comment"
+			]
+		],
+		"width": 476.0
+	},
+	"console":
+	{
+		"height": 97.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/nagase/hajispringbatch/src/main/resources/application.yml",
+		"/Users/nagase/git/ExtTest/ExtTest/src/main/resources/application.yml",
+		"/Users/nagase/Downloads/spring-batch-admin-1.3.1.RELEASE/sample/spring-batch-admin-sample/server.properties",
+		"/Users/nagase/Documents/mint/dspilot/dspilot-webapp/src/main/resources/config/application.yml",
+		"/Users/nagase/git/e2d3-contrib/bipartite-graph-simple/data.csv",
+		"/Users/nagase/Desktop/slipdata.csv",
+		"/Users/nagase/Desktop/Company.csv",
+		"/Users/nagase/Desktop/slipdataCSV",
+		"/Users/nagase/Desktop/CompanyCSV",
+		"/Users/nagase/Downloads/23000-08.0b/23_2014.csv",
+		"/Users/nagase/Desktop/bulkInsertData",
+		"/Users/nagase/Desktop/通貨変換.csv",
+		"/Users/nagase/Desktop/住所通貨変換",
+		"/Users/nagase/Downloads/chubu.csv",
+		"/Users/nagase/hajiboot7/.gitignore",
+		"/Users/nagase/git/hajiboot6/build.gradle",
+		"/Users/nagase/git/hajiboot6/src/main/resources/application.yml",
+		"/Users/nagase/gradlebasic/api/build.gradle",
+		"/Users/nagase/gradlebasic/build.gradle",
+		"/Users/nagase/gradlebasic/setting.gradle",
+		"/Users/nagase/gradlebasic/services/shared/build.gradle",
+		"/Users/nagase/Documents/workspace/hajiboot_rest/src/main/resources/application.yml",
+		"/Users/nagase/Documents/hajiboot/pom.xml",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/tute/index2.html",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/book/script.js",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/tute/index.html",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/crossfilter/index.html",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/data/InvoiceDetail.csv",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/tute/quakes.csv",
+		"/Users/nagase/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/brush/brashdemo.html",
+		"/Users/nagase/git/crossfilter/index.js",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/book/data.csv",
+		"/Users/nagase/Downloads/tamc-Sankey-e2afc2e/js/sankey.js",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/dot/dotcircle3.html",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/dot/dotdata.tsv",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/dot/dotcircle4.html",
+		"/Users/nagase/git/Datavisualization/D3Test/WebContent/dotcircle.html",
+		"/kk"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"select",
+			"sum",
+			"toMap",
+			"toList",
+			"toL",
+			"tolist",
+			"hibernate",
+			"boot",
+			"	",
+			"1",
+			":",
+			"targetLinks",
+			"changecol",
+			"sta",
+			"stac",
+			"mPrice",
+			"volumeByETAHour",
+			"centerBar",
+			"center",
+			"dc-data-count",
+			"gap",
+			"brush",
+			"blash",
+			"brash",
+			"dayOfWeek",
+			"dayOfWeekChart",
+			"volumeByHourGroup2",
+			"volumeByetaGroup2",
+			"volumeByETAHour",
+			"volumeByetaGroup",
+			"timeDimension",
+			"timeChart2",
+			"volumeByetaGroup",
+			"volumeByETAHour",
+			"earth",
+			"earth qua",
+			"timeChart2",
+			"timeChart",
+			"depthChart",
+			"timeChart",
+			"table-",
+			"table-g",
+			"date",
+			";*/\n",
+			"dayOfWeekChart",
+			"tooltip",
+			"tick",
+			"return",
+			">\n",
+			"resizePath",
+			".on",
+			"brushDirty",
+			"brush",
+			"flightList",
+			"domain",
+			"area",
+			"focus",
+			"path",
+			".x.axis",
+			"ysc",
+			"brush",
+			"blash",
+			"brash",
+			".chart",
+			"bar",
+			".chart",
+			"date",
+			"method",
+			"selectAll",
+			"render",
+			"selectAll",
+			"flightList",
+			"chart",
+			"formatNumber",
+			"flightlist",
+			"formatTime",
+			"json",
+			"jason",
+			"width",
+			"x",
+			"      .",
+			"ドットインストール"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			" ",
+			""
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": false,
+		"whole_word": true,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"settings":
+					{
+						"buffer_size": 151,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								151,
+								151
+							]
+						],
+						"settings":
+						{
+							"auto_name": "ava -Dexec.mainClass=org.springframework.batch.cor",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "life.js",
+					"settings":
+					{
+						"buffer_size": 4133,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4133,
+								0
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "index.html",
+					"settings":
+					{
+						"buffer_size": 2537,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1619,
+								1619
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "life.css",
+					"settings":
+					{
+						"buffer_size": 1633,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1633,
+								1633
+							]
+						],
+						"settings":
+						{
+							"auto_name": "body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,f",
+							"syntax": "Packages/CSS/CSS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 100.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"",
+				"nagase/gradlebasic/build.gradle"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 199.0,
+	"status_bar_visible": true
+}
