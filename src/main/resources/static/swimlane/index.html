@@ -34,6 +34,7 @@ https://github.com/hashrock/ganttpad
 	<h1>会議室利用実績分析画面デモ</h1>
 	データはテスト的に作成した、実績データと予定データをそれぞれ別のJSONファイルから読み込んでいる。 (test.json/test2.json)
 	<br /> これらをDBから取得するように作りこむことで、実際に動く仕組みの作成が可能となる。
+	<br/>リクエストサンプル　http://localhost:7776/data/3/value/25
 	<br />
 	<br />
 
@@ -308,9 +309,9 @@ var x1MonthAxis = d3.svg.axis()
 	.ticks(d3.time.mondays, 1)
 	.tickFormat(d3.time.format('%b - Week %W'))
 	.tickPadding(3)
-// 	.innerTickSize(-0)  // 目盛線の長さ（内側）
+ 	.innerTickSize(-0)  // 目盛線の長さ（内側）
 //    .outerTickSize(0.2) // 目盛線の長さ（外側）
-	.tickSize(5, 0, 0);
+	.tickSize(2, 0, 0);
 	
  //上グラフ上Tick2
    var x1MonthAxis_vLine = d3.svg.axis()
@@ -337,11 +338,12 @@ var x1DateAxis = d3.svg.axis()
 var xMonthAxis = d3.svg.axis()
 	.scale(x)
 	.orient('top')
-	.ticks(d3.time.mondays, 1)
+	.ticks(d3.time.months, 1)
 	//.ticks(d3.time.months, 1)
-	.tickFormat(d3.time.format('%Y %b'))
+	.tickFormat(ja_JP.timeFormat('%Y年%b'))
 	.tickPadding(12)
 	.tickSize(5, 0, 0);
+	//x1MonthAxis.ticks(d3.time.days, 1).tickFormat(ja_JP.timeFormat('%b%e日(%a)')) //日本語
 
 //下グラフの下Ticks
 var xDateAxis = d3.svg.axis()
@@ -349,7 +351,7 @@ var xDateAxis = d3.svg.axis()
 	.orient('bottom')
 	//[[]].ticks(d3.time.mondays, (x.domain()[1] - x.domain()[0]) > 15552e6 ? 2 : 1)
 	.ticks(d3.time.days, 3)
-	.tickFormat(d3.time.format('%d'))
+	.tickFormat(d3.time.format('%d日'))
 	.tickSize(6, 0, 0.5);
 
 
@@ -479,34 +481,34 @@ function display () {
 	x1.domain([minExtent, maxExtent]);
 	
 	//縮尺幅により、メモリの表示の仕方を変更する。
-	if ((maxExtent - minExtent) > 1468800000) { //年単位
+	if ((maxExtent - minExtent) > 1468800000) { //年単位(一番引いた状態）
 		//後ろの引数を変えると、目盛をスキップする数となる。
-		x1MonthAxis.ticks(d3.time.mondays, 1).tickFormat(ja_JP.timeFormat('%Y')); //上側メモリ
+		x1MonthAxis.ticks(d3.time.months, 1).tickFormat(ja_JP.timeFormat('%Y年%b')); //上側メモリ
 		x1MonthAxis_vLine.ticks(d3.time.hours, 24);
-		x1DateAxis.ticks(d3.time.days, 3).tickFormat(ja_JP.timeFormat('%b%d(%a)')); //下側メモリ
+		x1DateAxis.ticks(d3.time.days, 5).tickFormat(ja_JP.timeFormat('%b%d(%a)')); //下側メモリ
 	}
 	else if ((maxExtent - minExtent) > 1109600000) {//年単位
-		x1MonthAxis.ticks(d3.time.mondays, 2).tickFormat(d3.time.format('%Y'));
+		x1MonthAxis.ticks(d3.time.months, 1).tickFormat(d3.time.format('%Y%b'));
 		x1MonthAxis_vLine.ticks(d3.time.hours, 2);
-		x1DateAxis.ticks(d3.time.days, 2).tickFormat(ja_JP.timeFormat('%b%d(%a)'))
+		x1DateAxis.ticks(d3.time.days, 2).tickFormat(ja_JP.timeFormat('%b%d日(%a)'))
 		//console.log("1 vale="+(maxExtent - minExtent));
 	}
 	else if ((maxExtent - minExtent) > 259200000) {//月単位
-		x1MonthAxis.ticks(d3.time.mondays, 1).tickFormat(ja_JP.timeFormat('%Y'))
+		x1MonthAxis.ticks(d3.time.mondays, 1).tickFormat(ja_JP.timeFormat('%Y年%b'))
 		x1MonthAxis_vLine.ticks(d3.time.hours, 2);
-		x1DateAxis.ticks(d3.time.days, 1).tickFormat(ja_JP.timeFormat('%b%d(%a)'))
+		x1DateAxis.ticks(d3.time.days, 1).tickFormat(ja_JP.timeFormat('%b%d日(%a)'))
 		//console.log("2 vale="+(maxExtent - minExtent));
 	}
 	else if ((maxExtent - minExtent) > 86400000) {//月単位
 		//x1MonthAxis.ticks(d3.time.days, 1).tickFormat(d3.time.format('%b %e(%a)')) //英語
-		x1MonthAxis.ticks(d3.time.days, 1).tickFormat(ja_JP.timeFormat('%b%e(%a)')) //日本語
+		x1MonthAxis.ticks(d3.time.days, 1).tickFormat(ja_JP.timeFormat('%b%e日(%a)')) //日本語
 		x1MonthAxis_vLine.ticks(d3.time.hours, 1); //追加の細線
 		x1DateAxis.ticks(d3.time.hours, 3).tickFormat(d3.time.format('%H:%M '))
 		console.log("3 vale="+(maxExtent - minExtent));
 	}
 	else if ((maxExtent - minExtent) > 9088764) {//月単位
 		//x1MonthAxis.ticks(d3.time.days, 1).tickFormat(d3.time.format('%b %e(%a)')) //英語
-		x1MonthAxis.ticks(d3.time.days, 1).tickFormat(ja_JP.timeFormat('%b%e(%a)')) //日本語
+		x1MonthAxis.ticks(d3.time.days, 1).tickFormat(ja_JP.timeFormat('%b%e日(%a)')) //日本語
 		x1MonthAxis_vLine.ticks(d3.time.hours, 2); //追加の細線
 		x1DateAxis.ticks(d3.time.minutes, 90).tickFormat(d3.time.format('%H:%M '))
 		console.log("4 vale="+(maxExtent - minExtent));
